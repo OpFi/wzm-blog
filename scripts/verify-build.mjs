@@ -34,6 +34,7 @@ assert(home.includes("Syd Studio"), "Homepage should include site name");
 assert(home.includes("作品、文章和想法放在同一个现场"), "Homepage should include approved hero copy");
 assert(home.includes("Now"), "Homepage should include Now panel");
 assert(home.includes("Focus"), "Homepage should include Focus panel");
+assert(!home.includes("Private Draft Note"), "Homepage should not include draft note");
 
 const notesIndex = await read("notes/index.html");
 assert(notesIndex.includes("First Note"), "Notes page should include public note");
