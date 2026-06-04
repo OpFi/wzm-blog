@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import { getPublishedWriting } from "../../lib/content";
+
+const posts = await getPublishedWriting();
+---
+
+<BaseLayout title="Writing" description="Long-form technical writing, essays, and retrospectives.">
+  <section class="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8">
+    <header class="mb-8 max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Writing</p>
+      <h1 class="mt-3 text-4xl font-black text-slate-950 sm:text-5xl">Long-form thinking</h1>
+      <p class="mt-4 text-lg leading-8 text-slate-600">Technical essays, implementation notes, tutorials, and structured reflections.</p>
+    </header>
+    {posts.length > 0 ? (
+      <div class="grid gap-4">
+        {posts.map((post) => (
+          <ContentCard
+            href={`/writing/${post.id}/`}
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            tags={post.data.tags}
+            type="Writing"
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="rounded-lg border border-slate-200 bg-white p-5 text-slate-600">No writing published yet.</p>
+    )}
+  </section>
+</BaseLayout>
