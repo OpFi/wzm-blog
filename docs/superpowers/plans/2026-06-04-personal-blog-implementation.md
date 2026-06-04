@@ -881,18 +881,19 @@ import { getFeaturedProject, getFeaturedWriting, getPublishedNotes } from "../li
 const featuredProject = await getFeaturedProject();
 const featuredWriting = await getFeaturedWriting();
 const latestNote = (await getPublishedNotes())[0];
+const hasFeaturedContent = Boolean(featuredProject || featuredWriting || latestNote);
 ---
 
 <BaseLayout>
   <section class="relative overflow-hidden bg-[linear-gradient(135deg,rgba(219,234,254,0.88),rgba(254,243,199,0.7)_42%,rgba(220,252,231,0.88))]">
     <div class="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.12)_0_1px,transparent_1px_8px)] opacity-40"></div>
-    <div class="relative mx-auto grid min-h-[70vh] w-full max-w-6xl items-end gap-10 px-5 pb-14 pt-16 sm:px-8 lg:grid-cols-[1.25fr_0.75fr]">
+    <div class="relative mx-auto grid min-h-[62vh] w-full max-w-6xl items-end gap-10 px-5 pb-12 pt-14 sm:min-h-[70vh] sm:px-8 sm:pb-14 sm:pt-16 lg:grid-cols-[1.25fr_0.75fr]">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Personal website / Lab / Notebook</p>
-        <h1 class="mt-4 max-w-3xl font-serif text-5xl font-black leading-[0.98] text-slate-950 sm:text-7xl">
+        <h1 lang="zh-Hans" class="mt-4 max-w-3xl font-serif text-5xl font-black leading-[0.98] text-slate-950 sm:text-7xl">
           作品、文章和想法放在同一个现场。
         </h1>
-        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-700">
+        <p lang="zh-Hans" class="mt-6 max-w-2xl text-lg leading-8 text-slate-700">
           这里记录我正在构建的项目、完整的技术文章，以及一些更短、更松弛的思考。它像一个公开工作台，也像一间可以长期整理自己的房间。
         </p>
       </div>
@@ -907,29 +908,39 @@ const latestNote = (await getPublishedNotes())[0];
           <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Featured</p>
           <h2 class="mt-2 text-2xl font-black text-slate-950">Start here</h2>
         </div>
-        <p class="max-w-md text-sm leading-6 text-slate-600">A project, a long-form article, and a short note make the homepage feel alive from the first version.</p>
+        <p class="max-w-md text-sm leading-6 text-slate-600">
+          {hasFeaturedContent
+            ? "Featured work from the project, writing, and notes collections appears here as the site grows."
+            : "The first project, article, or note will appear here once it is published."}
+        </p>
       </div>
       <div class="grid gap-4 lg:grid-cols-3">
-        {featuredProject && <ProjectCard project={featuredProject} />}
-        {featuredWriting && (
-          <ContentCard
-            href={`/writing/${featuredWriting.id}/`}
-            title={featuredWriting.data.title}
-            description={featuredWriting.data.description}
-            date={featuredWriting.data.date}
-            tags={featuredWriting.data.tags}
-            type="Writing"
-          />
-        )}
-        {latestNote && (
-          <ContentCard
-            href={`/notes/${latestNote.id}/`}
-            title={latestNote.data.title}
-            description={latestNote.data.description}
-            date={latestNote.data.date}
-            tags={latestNote.data.tags}
-            type="Note"
-          />
+        {hasFeaturedContent ? (
+          <>
+            {featuredProject && <ProjectCard project={featuredProject} />}
+            {featuredWriting && (
+              <ContentCard
+                href={`/writing/${featuredWriting.id}/`}
+                title={featuredWriting.data.title}
+                description={featuredWriting.data.description}
+                date={featuredWriting.data.date}
+                tags={featuredWriting.data.tags}
+                type="Writing"
+              />
+            )}
+            {latestNote && (
+              <ContentCard
+                href={`/notes/${latestNote.id}/`}
+                title={latestNote.data.title}
+                description={latestNote.data.description}
+                date={latestNote.data.date}
+                tags={latestNote.data.tags}
+                type="Note"
+              />
+            )}
+          </>
+        ) : (
+          <p class="rounded-lg border border-slate-200 bg-white p-5 text-slate-600 shadow-sm lg:col-span-3">No featured content published yet.</p>
         )}
       </div>
     </div>
@@ -1075,7 +1086,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </ul>
       <h2>Contact</h2>
       <p>
-        Add social links and email here once the final public profiles are chosen.
+        Contact details and public profiles will be added here as the site settles into its first public version.
       </p>
     </div>
   </section>
@@ -1090,7 +1101,7 @@ Run:
 npm run check
 ```
 
-Expected: FAIL because dynamic detail routes and RSS are not created yet. List-page imports should not report errors.
+Expected: exit 0 with 0 errors/warnings/hints.
 
 - [ ] **Step 7: Commit homepage and list pages**
 
