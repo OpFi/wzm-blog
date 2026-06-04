@@ -581,25 +581,30 @@ const currentPath = Astro.url.pathname;
 const isActive = (href: string) => href === "/" ? currentPath === "/" : currentPath.startsWith(href);
 ---
 
-<header class="mx-auto flex w-full max-w-6xl items-center justify-between gap-5 px-5 py-5 sm:px-8">
+<header class="mx-auto flex w-full max-w-6xl flex-col items-start gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:px-8">
   <a class="text-sm font-extrabold tracking-tight" href="/" aria-label={`${site.name} home`}>
     {site.name}
   </a>
-  <nav aria-label="Primary navigation">
-    <ul class="flex items-center gap-3 text-xs text-slate-600 sm:gap-6 sm:text-sm">
-      {navItems.map((item) => (
-        <li>
-          <a
-            class:list={[
-              "rounded-full px-2 py-1 transition hover:text-slate-950",
-              isActive(item.href) && "bg-white/70 text-slate-950 shadow-sm",
-            ]}
-            href={item.href}
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
+  <nav class="w-full sm:w-auto" aria-label="Primary navigation">
+    <ul class="flex flex-wrap items-center gap-2 text-xs text-slate-600 sm:gap-6 sm:text-sm">
+      {navItems.map((item) => {
+        const active = isActive(item.href);
+
+        return (
+          <li>
+            <a
+              class:list={[
+                "rounded-full px-2 py-1 transition hover:text-slate-950",
+                active && "bg-white/70 text-slate-950 shadow-sm",
+              ]}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   </nav>
 </header>
@@ -662,8 +667,14 @@ const canonical = new URL(Astro.url.pathname, site.url);
   </head>
   <body class="min-h-screen text-slate-950 antialiased">
     <div class="flex min-h-screen flex-col">
+      <a
+        class="sr-only focus:not-sr-only focus:fixed focus:left-5 focus:top-5 focus:z-50 focus:rounded-full focus:bg-slate-950 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        href="#main-content"
+      >
+        Skip to content
+      </a>
       <Header />
-      <main class="flex-1">
+      <main id="main-content" class="flex-1">
         <slot />
       </main>
       <Footer />
@@ -679,10 +690,10 @@ Create `src/components/TagList.astro`:
 ```astro
 ---
 interface Props {
-  tags: string[];
+  tags?: string[];
 }
 
-const { tags } = Astro.props;
+const { tags = [] } = Astro.props;
 ---
 
 {tags.length > 0 && (
@@ -745,17 +756,20 @@ interface Props {
 
 const { project } = Astro.props;
 const href = `/projects/${project.id}/`;
+const displayTags = project.data.stack.length > 0 ? project.data.stack : project.data.tags;
 ---
 
 <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-  <a href={href}>
+  <a class="block" href={href}>
     <p class="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">{project.data.status}</p>
     <h2 class="text-xl font-bold leading-tight text-slate-950">{project.data.title}</h2>
     <p class="mt-3 text-sm leading-6 text-slate-600">{project.data.description}</p>
   </a>
-  <div class="mt-5">
-    <TagList tags={project.data.stack.length > 0 ? project.data.stack : project.data.tags} />
-  </div>
+  {displayTags.length > 0 && (
+    <div class="mt-5">
+      <TagList tags={displayTags} />
+    </div>
+  )}
   <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
     {project.data.demoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl}>Demo</a>}
     {project.data.repoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl}>Repo</a>}
@@ -772,7 +786,7 @@ Create `src/components/StatusPanel.astro`:
   <div class="relative z-10 grid gap-4">
     <div>
       <strong class="block text-sm text-slate-950">Now</strong>
-      <p class="mt-2 text-sm leading-6 text-slate-700">正在打磨一个个人博客系统，整理技术写作和作品集。</p>
+      <p class="mt-2 text-sm leading-6 text-slate-700" lang="zh-Hans">正在打磨一个个人博客系统，整理技术写作和作品集。</p>
     </div>
     <div class="border-t border-slate-900/10 pt-4">
       <strong class="block text-sm text-slate-950">Focus</strong>
@@ -811,9 +825,11 @@ const { title, description, date, tags = [], backHref, backLabel } = Astro.props
       <time class="text-sm text-slate-500" datetime={date.toISOString()}>{formatDate(date)}</time>
       <h1 class="mt-4 text-4xl font-black leading-tight text-slate-950 sm:text-5xl">{title}</h1>
       <p class="mt-5 text-lg leading-8 text-slate-600">{description}</p>
-      <div class="mt-6">
-        <TagList tags={tags} />
-      </div>
+      {tags.length > 0 && (
+        <div class="mt-6">
+          <TagList tags={tags} />
+        </div>
+      )}
     </header>
     <div class="prose-content mt-8">
       <slot />

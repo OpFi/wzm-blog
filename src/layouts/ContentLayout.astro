@@ -22,9 +22,11 @@ const { title, description, date, tags = [], backHref, backLabel } = Astro.props
       <time class="text-sm text-slate-500" datetime={date.toISOString()}>{formatDate(date)}</time>
       <h1 class="mt-4 text-4xl font-black leading-tight text-slate-950 sm:text-5xl">{title}</h1>
       <p class="mt-5 text-lg leading-8 text-slate-600">{description}</p>
-      <div class="mt-6">
-        <TagList tags={tags} />
-      </div>
+      {tags.length > 0 && (
+        <div class="mt-6">
+          <TagList tags={tags} />
+        </div>
+      )}
     </header>
     <div class="prose-content mt-8">
       <slot />

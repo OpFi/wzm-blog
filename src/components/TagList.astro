@@ -1,9 +1,9 @@
 ---
 interface Props {
-  tags: string[];
+  tags?: string[];
 }
 
-const { tags } = Astro.props;
+const { tags = [] } = Astro.props;
 ---
 
 {
