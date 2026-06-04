@@ -7,9 +7,10 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  ogType?: "website" | "article";
 }
 
-const { title = site.title, description = site.description } = Astro.props;
+const { title = site.title, description = site.description, ogType = "website" } = Astro.props;
 const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url);
 ---
@@ -25,7 +26,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <link rel="alternate" type="application/rss+xml" title={`${site.name} RSS`} href="/rss.xml" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
   </head>
   <body class="min-h-screen text-slate-950 antialiased">

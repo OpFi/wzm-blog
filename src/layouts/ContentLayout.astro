@@ -10,12 +10,13 @@ interface Props {
   tags?: string[];
   backHref: string;
   backLabel: string;
+  ogType?: "website" | "article";
 }
 
-const { title, description, date, tags = [], backHref, backLabel } = Astro.props;
+const { title, description, date, tags = [], backHref, backLabel, ogType = "website" } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} ogType={ogType}>
   <article class="mx-auto w-full max-w-3xl px-5 py-12 sm:px-8">
     <a class="text-sm font-semibold text-blue-600 hover:text-blue-800" href={backHref}>{backLabel}</a>
     <header class="mt-8 border-b border-slate-200 pb-8">

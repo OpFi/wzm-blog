@@ -4,6 +4,7 @@ import { navItems, site } from "../lib/site";
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+const isCurrentPage = (href: string) => currentPath === href;
 ---
 
 <header class="mx-auto flex w-full max-w-6xl flex-col items-start gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:px-8">
@@ -15,6 +16,7 @@ const isActive = (href: string) =>
       {
         navItems.map((item) => {
           const active = isActive(item.href);
+          const current = isCurrentPage(item.href);
 
           return (
             <li>
@@ -24,7 +26,7 @@ const isActive = (href: string) =>
                   active && "bg-white/70 text-slate-950 shadow-sm",
                 ]}
                 href={item.href}
-                aria-current={active ? "page" : undefined}
+                aria-current={current ? "page" : undefined}
               >
                 {item.label}
               </a>

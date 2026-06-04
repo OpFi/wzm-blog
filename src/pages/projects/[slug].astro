@@ -14,6 +14,7 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const hasProjectLinks = Boolean(project.data.demoUrl || project.data.repoUrl);
+const coverAlt = `${project.data.title} preview`;
 ---
 
 <ContentLayout
@@ -24,6 +25,15 @@ const hasProjectLinks = Boolean(project.data.demoUrl || project.data.repoUrl);
   backHref="/projects/"
   backLabel="Back to projects"
 >
+  {
+    project.data.cover && (
+      <img
+        class="mb-8 aspect-[16/10] w-full rounded-lg border border-slate-200 object-cover shadow-sm"
+        src={project.data.cover}
+        alt={coverAlt}
+      />
+    )
+  }
   <aside aria-label="Project details" class="mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
     <p class="text-sm font-semibold text-slate-950">Status: {project.data.status}</p>
     {project.data.stack.length > 0 && (
@@ -33,8 +43,20 @@ const hasProjectLinks = Boolean(project.data.demoUrl || project.data.repoUrl);
     )}
     {hasProjectLinks && (
       <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
-        {project.data.demoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl}>Demo</a>}
-        {project.data.repoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl}>Repo</a>}
+        {
+          project.data.demoUrl && (
+            <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl} aria-label={`View ${project.data.title} demo`}>
+              Demo
+            </a>
+          )
+        }
+        {
+          project.data.repoUrl && (
+            <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl} aria-label={`View ${project.data.title} repository`}>
+              Repo
+            </a>
+          )
+        }
       </div>
     )}
   </aside>
