@@ -8,9 +8,10 @@ interface Props {
   title?: string;
   description?: string;
   ogType?: "website" | "article";
+  showFooter?: boolean;
 }
 
-const { title = site.title, description = site.description, ogType = "website" } = Astro.props;
+const { title = site.title, description = site.description, ogType = "website", showFooter = true } = Astro.props;
 const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url);
 ---
@@ -41,7 +42,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
       <main id="main-content" class="flex-1">
         <slot />
       </main>
-      <Footer />
+      {showFooter && <Footer />}
     </div>
   </body>
 </html>

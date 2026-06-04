@@ -78,15 +78,16 @@ assert(home.includes("随笔"), "Homepage should include Chinese Essays nav labe
 assert(home.includes("日常"), "Homepage should include Chinese Daily nav label");
 assert(home.includes("项目"), "Homepage should include Chinese Projects nav label");
 assert(home.includes("关于"), "Homepage should include Chinese About nav label");
-assert(home.includes("在叶子的缝隙里，写代码和生活"), "Homepage should include green blog hero copy");
-assert(home.includes("绿色主题"), "Homepage should include green theme marker");
-assert(home.includes("精选文章"), "Homepage should include featured articles section");
-assert(home.includes("最新更新"), "Homepage should include latest updates section");
-assert(home.includes("分类索引"), "Homepage should include category index section");
-assert(home.includes("友情链接"), "Homepage should include friend links section");
-assert(home.includes("青木开发日志"), "Homepage should include sample friend link");
-assert(home.includes("现在"), "Homepage should include localized Now panel");
-assert(home.includes("关注"), "Homepage should include localized Focus panel");
+assert(home.includes("欢迎来到我的网站"), "Homepage should include the minimal welcome line");
+assert(
+  home.includes('aria-label="循环生长的绿色叶片动画"'),
+  "Homepage should include an accessible label for the center animation",
+);
+const removedHomeSections = ["精选文章", "最新更新", "分类索引", "友情链接", "青木开发日志", "现在", "关注"];
+for (const section of removedHomeSections) {
+  assert(!home.includes(section), `Homepage should not include removed section: ${section}`);
+}
+assert(!home.includes("使用 Astro 构建"), "Homepage should not include the shared footer copy");
 assert(!home.includes("仅自己可见的草稿"), "Homepage should not include draft note");
 assert(home.includes('<meta property="og:type" content="website">'), "Homepage should use website Open Graph type");
 

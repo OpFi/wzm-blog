@@ -20,10 +20,13 @@ The center animation is CSS-only: a layered green leaf-ring form that slowly rot
 
 The animation container uses `role="img"` and an accessible label, so the visual has a meaningful non-visual description. A `prefers-reduced-motion` rule freezes the movement for visitors who disable motion.
 
+The shared layout may expose a `showFooter` switch so the homepage can hide the footer while all other pages keep the existing footer.
+
 ## Boundaries
 
 - Do not change navigation labels or destination routes.
 - Do not remove content pages, collections, RSS, sitemap, or existing sample data.
+- Do not remove the shared footer from non-homepage pages.
 - Do not add visible explanatory text beyond `欢迎来到我的网站`.
 - Do not use external animation libraries.
 
@@ -35,6 +38,7 @@ The build verification must confirm:
 - The homepage contains `欢迎来到我的网站`.
 - The homepage contains the accessible animation label.
 - Old homepage sections no longer appear in `dist/index.html`.
+- The homepage does not render the shared footer copy.
 - Existing content routes, RSS, sitemap, and draft filtering still work.
 
 Browser verification should confirm the animation is centered, the page does not overflow horizontally, and no console errors appear.

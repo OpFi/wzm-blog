@@ -15,6 +15,9 @@
 - Modify: `scripts/verify-build.mjs`
   - Updates homepage assertions to require the new welcome line and accessible animation label.
   - Rejects old homepage section labels that should be removed.
+- Modify: `src/layouts/BaseLayout.astro`
+  - Adds a `showFooter` prop that defaults to `true`.
+  - Allows the homepage to hide the footer without affecting other pages.
 - Modify: `src/pages/index.astro`
   - Removes homepage content imports and old sections.
   - Adds the minimal homepage layout and CSS-only animation.
@@ -40,6 +43,7 @@ const removedHomeSections = ["精选文章", "最新更新", "分类索引", "�
 for (const section of removedHomeSections) {
   assert(!home.includes(section), `Homepage should not include removed section: ${section}`);
 }
+assert(!home.includes("使用 Astro 构建"), "Homepage should not include the shared footer copy");
 ```
 
 - [ ] **Step 2: Run the verification and confirm it fails**
@@ -56,7 +60,7 @@ Expected: fail because the current homepage still contains old sections and does
 
 - [ ] **Step 1: Replace `src/pages/index.astro` with the minimal page**
 
-Use `BaseLayout`, one visible welcome line, and a centered animation block with:
+Add `showFooter?: boolean` to `src/layouts/BaseLayout.astro`, default it to `true`, and render the shared footer only when `showFooter` is enabled. Then use `BaseLayout` with `showFooter={false}`, one visible welcome line, and a centered animation block with:
 
 ```html
 <div class="leaf-motion" role="img" aria-label="循环生长的绿色叶片动画">
@@ -119,7 +123,7 @@ Expected: pass with `Build verification passed.`
 Run:
 
 ```bash
-git add scripts/verify-build.mjs src/pages/index.astro docs/superpowers/specs/2026-06-04-minimal-green-home-design.md docs/superpowers/plans/2026-06-04-minimal-green-home.md
+git add scripts/verify-build.mjs src/layouts/BaseLayout.astro src/pages/index.astro docs/superpowers/specs/2026-06-04-minimal-green-home-design.md docs/superpowers/plans/2026-06-04-minimal-green-home.md
 git commit -m "feat: simplify homepage with green animation"
 ```
 
