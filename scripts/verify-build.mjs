@@ -28,6 +28,7 @@ assert(exists("index.html"), "Expected dist/index.html to exist");
 assert(exists("projects/index.html"), "Expected dist/projects/index.html to exist");
 assert(exists("writing/index.html"), "Expected dist/writing/index.html to exist");
 assert(exists("notes/index.html"), "Expected dist/notes/index.html to exist");
+assert(exists("daily/index.html"), "Expected dist/daily/index.html to exist");
 assert(!exists("notes/private-draft-note/index.html"), "Draft note detail page should not exist");
 assert(exists("about/index.html"), "Expected dist/about/index.html to exist");
 assert(exists("rss.xml"), "Expected RSS feed to exist");
@@ -71,11 +72,15 @@ for (const [slug] of expectedNotes) {
 const home = await read("index.html");
 assert(home.includes('<html lang="zh-CN">'), "Homepage should declare Simplified Chinese language");
 assert(home.includes("王子明的数字工作室"), "Homepage should include Chinese site name");
+assert(home.includes("首页"), "Homepage should include Chinese Home nav label");
+assert(home.includes("技术"), "Homepage should include Chinese Tech nav label");
+assert(home.includes("随笔"), "Homepage should include Chinese Essays nav label");
+assert(home.includes("日常"), "Homepage should include Chinese Daily nav label");
 assert(home.includes("项目"), "Homepage should include Chinese Projects nav label");
-assert(home.includes("文章"), "Homepage should include Chinese Writing nav label");
-assert(home.includes("随记"), "Homepage should include Chinese Notes nav label");
 assert(home.includes("关于"), "Homepage should include Chinese About nav label");
-assert(home.includes("作品、文章和想法放在同一个现场"), "Homepage should include approved hero copy");
+assert(home.includes("写代码，也写下代码背后的生活"), "Homepage should include blog-style hero copy");
+assert(home.includes("最新更新"), "Homepage should include latest updates section");
+assert(home.includes("分类索引"), "Homepage should include category index section");
 assert(home.includes("现在"), "Homepage should include localized Now panel");
 assert(home.includes("关注"), "Homepage should include localized Focus panel");
 assert(!home.includes("仅自己可见的草稿"), "Homepage should not include draft note");
@@ -119,6 +124,11 @@ for (const [, title] of expectedNotes) {
 }
 assert(!notesIndex.includes("仅自己可见的草稿"), "Notes page should not include draft note");
 
+const dailyIndex = await read("daily/index.html");
+assert(dailyIndex.includes("日常"), "Daily page should include daily heading");
+assert(dailyIndex.includes("今天只修一个小问题"), "Daily page should include daily note");
+assert(!dailyIndex.includes("仅自己可见的草稿"), "Daily page should not include draft note");
+
 const writingDetail = await read("writing/building-a-personal-site/index.html");
 assert(
   !hasLinkWithAttribute(writingDetail, "/writing/", 'aria-current="page"'),
@@ -128,10 +138,13 @@ assert(
   writingDetail.includes('<meta property="og:type" content="article">'),
   "Writing detail should use article Open Graph type",
 );
+assert(writingDetail.includes("约") && writingDetail.includes("分钟阅读"), "Writing detail should include reading time");
+assert(writingDetail.includes("较早一篇"), "Writing detail should include older article navigation");
 assert(writingDetail.includes("我希望这个网站不是一次性作品"), "Writing detail should include realistic Chinese article copy");
 
 const noteDetail = await read("notes/first-note/index.html");
 assert(noteDetail.includes('<meta property="og:type" content="article">'), "Note detail should use article Open Graph type");
+assert(noteDetail.includes("随笔") || noteDetail.includes("日常"), "Note detail should include localized entry type metadata");
 assert(noteDetail.includes("先把公开工作台搭起来"), "Note detail should include realistic Chinese note copy");
 
 const rss = await read("rss.xml");

@@ -23,6 +23,13 @@ export function formatDate(date: Date) {
   }).format(date);
 }
 
+export function estimateReadingMinutes(text: string) {
+  const cjkCount = (text.match(/[\u4e00-\u9fff]/g) ?? []).length;
+  const wordCount = text.replace(/[\u4e00-\u9fff]/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  const units = cjkCount + wordCount;
+  return Math.max(1, Math.ceil(units / 500));
+}
+
 export async function getProjects() {
   const projects = await getCollection("projects");
   return [...projects].sort(byDateDesc);
@@ -46,4 +53,28 @@ export async function getFeaturedWriting(): Promise<WritingEntry | undefined> {
 export async function getPublishedNotes() {
   const entries = await getCollection("notes", ({ data }) => !data.draft);
   return [...entries].sort(byDateDesc);
+}
+
+export async function getDailyNotes() {
+  const notes = await getPublishedNotes();
+  return notes.filter((note) => note.data.tags.includes("日常"));
+}
+
+export async function getLatestUpdates(limit = 6) {
+  const writing = await getPublishedWriting();
+  const notes = await getPublishedNotes();
+  return [
+    ...writing.map((entry) => ({
+      entry,
+      type: "技术",
+      href: `/writing/${entry.id}/`,
+    })),
+    ...notes.map((entry) => ({
+      entry,
+      type: entry.data.tags.includes("日常") ? "日常" : "随笔",
+      href: `/notes/${entry.id}/`,
+    })),
+  ]
+    .sort((a, b) => byDateDesc(a.entry, b.entry))
+    .slice(0, limit);
 }

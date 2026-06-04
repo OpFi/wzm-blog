@@ -11,16 +11,38 @@ interface Props {
   backHref: string;
   backLabel: string;
   ogType?: "website" | "article";
+  metaLabel?: string;
+  newerHref?: string;
+  newerLabel?: string;
+  olderHref?: string;
+  olderLabel?: string;
 }
 
-const { title, description, date, tags = [], backHref, backLabel, ogType = "website" } = Astro.props;
+const {
+  title,
+  description,
+  date,
+  tags = [],
+  backHref,
+  backLabel,
+  ogType = "website",
+  metaLabel,
+  newerHref,
+  newerLabel,
+  olderHref,
+  olderLabel,
+} = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} ogType={ogType}>
   <article class="mx-auto w-full max-w-3xl px-5 py-12 sm:px-8">
     <a class="text-sm font-semibold text-blue-600 hover:text-blue-800" href={backHref}>{backLabel}</a>
     <header class="mt-8 border-b border-slate-200 pb-8">
-      <time class="text-sm text-slate-500" datetime={date.toISOString()}>{formatDate(date)}</time>
+      <div class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {metaLabel && <span aria-hidden="true">/</span>}
+        {metaLabel && <span>{metaLabel}</span>}
+      </div>
       <h1 class="mt-4 text-4xl font-black leading-tight text-slate-950 sm:text-5xl">{title}</h1>
       <p class="mt-5 text-lg leading-8 text-slate-600">{description}</p>
       {tags.length > 0 && (
@@ -32,5 +54,25 @@ const { title, description, date, tags = [], backHref, backLabel, ogType = "webs
     <div class="prose-content mt-8">
       <slot />
     </div>
+    {(newerHref || olderHref) && (
+      <nav class="mt-12 grid gap-3 border-t border-slate-200 pt-6 sm:grid-cols-2" aria-label="相邻内容">
+        <div>
+          {newerHref && newerLabel && (
+            <a class="block rounded-lg border border-slate-200 bg-white p-4 text-sm shadow-sm transition hover:shadow-md" href={newerHref}>
+              <span class="text-slate-500">较新一篇</span>
+              <strong class="mt-2 block text-slate-950">{newerLabel}</strong>
+            </a>
+          )}
+        </div>
+        <div>
+          {olderHref && olderLabel && (
+            <a class="block rounded-lg border border-slate-200 bg-white p-4 text-sm shadow-sm transition hover:shadow-md" href={olderHref}>
+              <span class="text-slate-500">较早一篇</span>
+              <strong class="mt-2 block text-slate-950">{olderLabel}</strong>
+            </a>
+          )}
+        </div>
+      </nav>
+    )}
   </article>
 </BaseLayout>

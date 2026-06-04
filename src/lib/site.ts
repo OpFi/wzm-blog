@@ -8,8 +8,10 @@ export const site = {
 } as const;
 
 export const navItems = [
+  { href: "/", label: "首页" },
+  { href: "/writing/", label: "技术" },
+  { href: "/notes/", label: "随笔" },
+  { href: "/daily/", label: "日常" },
   { href: "/projects/", label: "项目" },
-  { href: "/writing/", label: "文章" },
-  { href: "/notes/", label: "随记" },
   { href: "/about/", label: "关于" },
 ] as const;

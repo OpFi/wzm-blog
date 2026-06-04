@@ -1,17 +1,26 @@
 ---
 import { getCollection, render } from "astro:content";
 import ContentLayout from "../../layouts/ContentLayout.astro";
+import { byDateDesc, estimateReadingMinutes } from "../../lib/content";
 
 export async function getStaticPaths() {
   const notes = await getCollection("notes", ({ data }) => !data.draft);
-  return notes.map((note) => ({
+  const sortedNotes = [...notes].sort(byDateDesc);
+
+  return sortedNotes.map((note, index) => ({
     params: { slug: note.id },
-    props: { note },
+    props: {
+      note,
+      newerNote: sortedNotes[index - 1],
+      olderNote: sortedNotes[index + 1],
+    },
   }));
 }
 
-const { note } = Astro.props;
+const { note, newerNote, olderNote } = Astro.props;
 const { Content } = await render(note);
+const readingMinutes = estimateReadingMinutes(note.body ?? "");
+const noteType = note.data.tags.includes("日常") ? "日常" : "随笔";
 ---
 
 <ContentLayout
@@ -22,6 +31,11 @@ const { Content } = await render(note);
   backHref="/notes/"
   backLabel="返回随记"
   ogType="article"
+  metaLabel={`${noteType} · 约 ${readingMinutes} 分钟阅读`}
+  newerHref={newerNote ? `/notes/${newerNote.id}/` : undefined}
+  newerLabel={newerNote?.data.title}
+  olderHref={olderNote ? `/notes/${olderNote.id}/` : undefined}
+  olderLabel={olderNote?.data.title}
 >
   <Content />
 </ContentLayout>

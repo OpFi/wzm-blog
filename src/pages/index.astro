@@ -1,75 +1,80 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ContentCard from "../components/ContentCard.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import StatusPanel from "../components/StatusPanel.astro";
-import { getFeaturedProject, getFeaturedWriting, getPublishedNotes } from "../lib/content";
+import { formatDate, getFeaturedProject, getLatestUpdates } from "../lib/content";
 
 const featuredProject = await getFeaturedProject();
-const featuredWriting = await getFeaturedWriting();
-const latestNote = (await getPublishedNotes())[0];
-const hasFeaturedContent = Boolean(featuredProject || featuredWriting || latestNote);
+const latestUpdates = await getLatestUpdates(6);
+const categories = [
+  { href: "/writing/", label: "技术", description: "实现记录、工具链、部署和工程取舍。" },
+  { href: "/notes/", label: "随笔", description: "还没有展开成文章的观察和片段。" },
+  { href: "/daily/", label: "日常", description: "更靠近生活现场的小记录。" },
+  { href: "/projects/", label: "项目", description: "正在打磨或已经完成的作品。" },
+];
 ---
 
 <BaseLayout>
-  <section class="relative overflow-hidden bg-[linear-gradient(135deg,rgba(219,234,254,0.88),rgba(254,243,199,0.7)_42%,rgba(220,252,231,0.88))]">
-    <div class="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.12)_0_1px,transparent_1px_8px)] opacity-40"></div>
-    <div class="relative mx-auto grid min-h-[62vh] w-full max-w-6xl items-end gap-10 px-5 pb-12 pt-14 sm:min-h-[70vh] sm:px-8 sm:pb-14 sm:pt-16 lg:grid-cols-[1.25fr_0.75fr]">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">个人网站 / 实验室 / 笔记本</p>
-        <h1 class="mt-4 max-w-3xl font-serif text-5xl font-black leading-[0.98] text-slate-950 sm:text-7xl">
-          作品、文章和想法放在同一个现场。
+  <section class="border-y border-slate-200 bg-[linear-gradient(135deg,rgba(248,250,252,0.96),rgba(239,246,255,0.88)_48%,rgba(240,253,244,0.86))]">
+    <div class="mx-auto grid w-full max-w-6xl gap-8 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1fr_22rem]">
+      <div class="max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">个人博客 / 技术写作 / 日常记录</p>
+        <h1 class="mt-4 font-serif text-4xl font-black leading-tight text-slate-950 sm:text-6xl">
+          写代码，也写下代码背后的生活。
         </h1>
-        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-700">
-          这里记录我正在构建的 Web 产品、完整的技术文章，以及一些更短、更松弛的开发随记。它像一个公开工作台，也像一间可以长期整理自己的房间。
+        <p class="mt-6 text-lg leading-8 text-slate-700">
+          我是王子明。这里放技术实现、产品取舍、个人项目和一些日常片段。它不急着成为一本完整的书，更像一张持续更新的工作桌。
         </p>
+        <div class="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
+          <a class="rounded-full bg-slate-950 px-4 py-2 text-white transition hover:bg-slate-800" href="/writing/">读技术文章</a>
+          <a class="rounded-full border border-slate-300 bg-white/70 px-4 py-2 text-slate-800 transition hover:border-slate-500" href="/daily/">看日常记录</a>
+          <a class="rounded-full border border-slate-300 bg-white/70 px-4 py-2 text-slate-800 transition hover:border-slate-500" href="/about/">关于我</a>
+        </div>
       </div>
       <StatusPanel />
     </div>
   </section>
 
   <section class="bg-white/80 px-5 py-12 sm:px-8">
-    <div class="mx-auto w-full max-w-6xl">
-      <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">精选</p>
-          <h2 class="mt-2 text-2xl font-black text-slate-950">从这里开始</h2>
+    <div class="mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1fr_20rem]">
+      <div>
+        <div class="mb-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">最新更新</p>
+          <h2 class="mt-2 text-3xl font-black text-slate-950">最近写下的东西</h2>
         </div>
-        <p class="max-w-md text-sm leading-6 text-slate-600">
-          {hasFeaturedContent
-            ? "精选项目、文章和随记会在这里汇合，方便快速了解我最近在做什么。"
-            : "发布第一条项目、文章或随记后，这里会自动出现内容。"}
-        </p>
+        <div class="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white shadow-sm">
+          {latestUpdates.map((update) => (
+            <a class="block px-5 py-5 transition hover:bg-slate-50" href={update.href}>
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+                <p class="text-sm font-semibold text-slate-500">{update.type}</p>
+                <time class="text-xs text-slate-500" datetime={update.entry.data.date.toISOString()}>{formatDate(update.entry.data.date)}</time>
+              </div>
+              <h3 class="mt-2 text-xl font-bold leading-tight text-slate-950">{update.entry.data.title}</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">{update.entry.data.description}</p>
+            </a>
+          ))}
+        </div>
       </div>
-      <div class="grid gap-4 lg:grid-cols-3">
-        {hasFeaturedContent ? (
-          <>
-            {featuredProject && <ProjectCard project={featuredProject} />}
-            {featuredWriting && (
-              <ContentCard
-                href={`/writing/${featuredWriting.id}/`}
-                title={featuredWriting.data.title}
-                description={featuredWriting.data.description}
-                date={featuredWriting.data.date}
-                tags={featuredWriting.data.tags}
-                type="文章"
-              />
-            )}
-            {latestNote && (
-              <ContentCard
-                href={`/notes/${latestNote.id}/`}
-                title={latestNote.data.title}
-                description={latestNote.data.description}
-                date={latestNote.data.date}
-                tags={latestNote.data.tags}
-                type="随记"
-              />
-            )}
-          </>
-        ) : (
-          <p class="rounded-lg border border-slate-200 bg-white p-5 text-slate-600 shadow-sm lg:col-span-3">暂时还没有发布精选内容。</p>
+
+      <aside class="grid gap-5">
+        <section>
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">分类索引</p>
+          <div class="mt-3 grid gap-3">
+            {categories.map((category) => (
+              <a class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" href={category.href}>
+                <h2 class="text-lg font-bold text-slate-950">{category.label}</h2>
+                <p class="mt-2 text-sm leading-6 text-slate-600">{category.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+        {featuredProject && (
+          <section>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">正在做</p>
+            <ProjectCard project={featuredProject} />
+          </section>
         )}
-      </div>
+      </aside>
     </div>
   </section>
 </BaseLayout>

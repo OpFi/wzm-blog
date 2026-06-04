@@ -1,17 +1,25 @@
 ---
 import { getCollection, render } from "astro:content";
 import ContentLayout from "../../layouts/ContentLayout.astro";
+import { byDateDesc, estimateReadingMinutes } from "../../lib/content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("writing", ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  const sortedPosts = [...posts].sort(byDateDesc);
+
+  return sortedPosts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      newerPost: sortedPosts[index - 1],
+      olderPost: sortedPosts[index + 1],
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, newerPost, olderPost } = Astro.props;
 const { Content } = await render(post);
+const readingMinutes = estimateReadingMinutes(post.body ?? "");
 ---
 
 <ContentLayout
@@ -22,6 +30,11 @@ const { Content } = await render(post);
   backHref="/writing/"
   backLabel="返回文章"
   ogType="article"
+  metaLabel={`技术 · 约 ${readingMinutes} 分钟阅读`}
+  newerHref={newerPost ? `/writing/${newerPost.id}/` : undefined}
+  newerLabel={newerPost?.data.title}
+  olderHref={olderPost ? `/writing/${olderPost.id}/` : undefined}
+  olderLabel={olderPost?.data.title}
 >
   <Content />
 </ContentLayout>
