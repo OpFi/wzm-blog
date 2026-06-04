@@ -227,6 +227,11 @@ img {
   opacity: 0.5;
 }
 
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
 .prose-content {
   font-size: 1rem;
   line-height: 1.8;
@@ -281,7 +286,7 @@ Run:
 npm run check
 ```
 
-Expected: FAIL because no Astro pages exist yet. Continue to Task 2.
+Expected: Astro currently exits 0 with a missing-pages warning and 0 diagnostics because no pages exist yet. Continue to Task 2.
 
 - [ ] **Step 8: Commit foundation**
 
