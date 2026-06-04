@@ -8,7 +8,7 @@ interface Props {
   description: string;
   date: Date;
   tags?: string[];
-  type: "Writing" | "Note";
+  type: string;
 }
 
 const { href, title, description, date, tags = [], type } = Astro.props;

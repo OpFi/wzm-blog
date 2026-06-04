@@ -1,15 +1,26 @@
 ---
-title: "Personal Blog System"
-description: "A creator-studio website for projects, long-form writing, and short notes."
+title: "个人博客系统"
+description: "一个把项目、技术文章和短随记放在同一处的中文个人网站。"
 date: "2026-06-04"
-status: "In progress"
-tags: ["Website", "Writing", "Portfolio"]
+status: "持续打磨"
+tags: ["个人网站", "作品集", "内容系统"]
 stack: ["Astro", "MDX", "Tailwind CSS", "Vercel"]
 featured: true
 cover: "/images/personal-blog-system-cover.png"
 demoUrl: "https://syd-studio.vercel.app"
 ---
 
-This project is the public home for my work, writing, and evolving ideas.
+这个项目是我给自己搭的公开工作台。它不只是一个“关于我”的页面，而是把项目进度、技术文章和日常随记都放在同一个结构里。
 
-It starts as a static website because the first goal is momentum: make it easy to publish, easy to maintain, and easy to improve.
+第一版选择 Astro 和 MDX，是因为我希望发布流程尽量接近写代码：新建文件、写 frontmatter、提交、部署。这样内容不会被后台系统绑住，未来需要 CMS 时也有清晰的数据边界。
+
+## 目前已经完成
+
+- 项目、文章、随记三套内容集合。
+- 首页精选模块，自动展示最新或标记为精选的内容。
+- RSS、sitemap、草稿过滤和构建后验证脚本。
+- 适合中文内容阅读的排版节奏。
+
+## 下一步
+
+我想把它接入真实域名，并补一组长期维护的内容模板：项目复盘、上线记录、阅读笔记和每周构建日志。

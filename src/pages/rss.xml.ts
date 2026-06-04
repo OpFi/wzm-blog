@@ -27,6 +27,6 @@ export async function GET(context: { site?: URL }) {
     description: site.description,
     site: siteUrl,
     items,
-    customData: "<language>en-us</language>",
+    customData: "<language>zh-cn</language>",
   });
 }

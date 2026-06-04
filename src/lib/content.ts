@@ -15,9 +15,9 @@ export function byDateDesc<T extends DatedEntry>(a: T, b: T) {
 }
 
 export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric",
     timeZone: "UTC",
   }).format(date);

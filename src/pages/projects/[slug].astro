@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const hasProjectLinks = Boolean(project.data.demoUrl || project.data.repoUrl);
-const coverAlt = `${project.data.title} preview`;
+const coverAlt = `${project.data.title}预览`;
 ---
 
 <ContentLayout
@@ -23,7 +23,7 @@ const coverAlt = `${project.data.title} preview`;
   date={project.data.date}
   tags={project.data.tags}
   backHref="/projects/"
-  backLabel="Back to projects"
+  backLabel="返回项目"
 >
   {
     project.data.cover && (
@@ -34,8 +34,8 @@ const coverAlt = `${project.data.title} preview`;
       />
     )
   }
-  <aside aria-label="Project details" class="mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
-    <p class="text-sm font-semibold text-slate-950">Status: {project.data.status}</p>
+  <aside aria-label="项目详情" class="mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+    <p class="text-sm font-semibold text-slate-950">状态：{project.data.status}</p>
     {project.data.stack.length > 0 && (
       <div class="mt-4">
         <TagList tags={project.data.stack} />
@@ -45,15 +45,15 @@ const coverAlt = `${project.data.title} preview`;
       <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
         {
           project.data.demoUrl && (
-            <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl} aria-label={`View ${project.data.title} demo`}>
-              Demo
+            <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl} aria-label={`查看${project.data.title}演示`}>
+              演示
             </a>
           )
         }
         {
           project.data.repoUrl && (
-            <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl} aria-label={`View ${project.data.title} repository`}>
-              Repo
+            <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl} aria-label={`查看${project.data.title}代码仓库`}>
+              代码
             </a>
           )
         }
