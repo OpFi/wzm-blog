@@ -89,7 +89,8 @@ Create `package.json`:
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",
     "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vite": "^7.3.5"
   }
 }
 ```
@@ -103,6 +104,8 @@ npm install
 ```
 
 Expected: `package-lock.json` is created and npm exits with code 0.
+
+`vite` is declared explicitly so Astro and `@tailwindcss/vite` resolve the same Astro-compatible Vite 7 version instead of allowing the Tailwind peer dependency to install a separate Vite 8 build pipeline.
 
 - [ ] **Step 3: Write Astro configuration**
 
