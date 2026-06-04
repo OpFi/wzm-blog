@@ -1143,6 +1143,7 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const hasProjectLinks = Boolean(project.data.demoUrl || project.data.repoUrl);
 ---
 
 <ContentLayout
@@ -1153,16 +1154,20 @@ const { Content } = await render(project);
   backHref="/projects/"
   backLabel="Back to projects"
 >
-  <div class="mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+  <aside aria-label="Project details" class="mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
     <p class="text-sm font-semibold text-slate-950">Status: {project.data.status}</p>
-    <div class="mt-4">
-      <TagList tags={project.data.stack} />
-    </div>
-    <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
-      {project.data.demoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl}>Demo</a>}
-      {project.data.repoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl}>Repo</a>}
-    </div>
-  </div>
+    {project.data.stack.length > 0 && (
+      <div class="mt-4">
+        <TagList tags={project.data.stack} />
+      </div>
+    )}
+    {hasProjectLinks && (
+      <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
+        {project.data.demoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.demoUrl}>Demo</a>}
+        {project.data.repoUrl && <a class="text-blue-600 hover:text-blue-800" href={project.data.repoUrl}>Repo</a>}
+      </div>
+    )}
+  </aside>
   <Content />
 </ContentLayout>
 ```
