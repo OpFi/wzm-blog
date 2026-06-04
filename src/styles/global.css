@@ -64,6 +64,11 @@ img {
   opacity: 0.5;
 }
 
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
 .prose-content {
   font-size: 1rem;
   line-height: 1.8;

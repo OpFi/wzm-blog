@@ -76,19 +76,20 @@ Create `package.json`:
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "check": "astro check",
-    "verify": "node scripts/verify-build.mjs",
-    "test": "npm run build && npm run verify"
+    "check": "astro check"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "dependencies": {
-    "@astrojs/check": "latest",
-    "@astrojs/mdx": "latest",
-    "@astrojs/rss": "latest",
-    "@astrojs/sitemap": "latest",
-    "@tailwindcss/vite": "latest",
-    "astro": "latest",
-    "tailwindcss": "latest",
-    "typescript": "latest"
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "^6.0.2",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.4",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3"
   }
 }
 ```
@@ -1256,9 +1257,27 @@ git commit -m "feat: add detail pages and rss"
 ## Task 7: Build Verification Script
 
 **Files:**
+- Modify: `package.json`
 - Create: `scripts/verify-build.mjs`
 
-- [ ] **Step 1: Write failing verification script**
+- [ ] **Step 1: Add verification scripts**
+
+Update `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "verify": "node scripts/verify-build.mjs",
+    "test": "npm run build && npm run verify"
+  }
+}
+```
+
+- [ ] **Step 2: Write failing verification script**
 
 Create `scripts/verify-build.mjs`:
 
@@ -1312,7 +1331,7 @@ assert(!rss.includes("Private Draft Note"), "RSS should not include draft note")
 console.log("Build verification passed.");
 ```
 
-- [ ] **Step 2: Run verification before build**
+- [ ] **Step 3: Run verification before build**
 
 Run:
 
@@ -1322,7 +1341,7 @@ npm run verify
 
 Expected: FAIL if `dist/` is absent. This proves the script is checking the build output.
 
-- [ ] **Step 3: Run full test command**
+- [ ] **Step 4: Run full test command**
 
 Run:
 
@@ -1332,7 +1351,7 @@ npm run test
 
 Expected: PASS with `Build verification passed.` after Astro builds the site.
 
-- [ ] **Step 4: Commit verification script**
+- [ ] **Step 5: Commit verification script**
 
 Run:
 
