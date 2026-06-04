@@ -1,0 +1,32 @@
+---
+import { navItems, site } from "../lib/site";
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+---
+
+<header class="mx-auto flex w-full max-w-6xl items-center justify-between gap-5 px-5 py-5 sm:px-8">
+  <a class="text-sm font-extrabold tracking-tight" href="/" aria-label={`${site.name} home`}>
+    {site.name}
+  </a>
+  <nav aria-label="Primary navigation">
+    <ul class="flex items-center gap-3 text-xs text-slate-600 sm:gap-6 sm:text-sm">
+      {
+        navItems.map((item) => (
+          <li>
+            <a
+              class:list={[
+                "rounded-full px-2 py-1 transition hover:text-slate-950",
+                isActive(item.href) && "bg-white/70 text-slate-950 shadow-sm",
+              ]}
+              href={item.href}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
