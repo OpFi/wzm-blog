@@ -311,8 +311,9 @@ git commit -m "chore: scaffold astro foundation"
 Create `src/content.config.ts`:
 
 ```ts
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
@@ -325,8 +326,8 @@ const projects = defineCollection({
     stack: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     cover: z.string().optional(),
-    repoUrl: z.string().url().optional(),
-    demoUrl: z.string().url().optional(),
+    repoUrl: z.url().optional(),
+    demoUrl: z.url().optional(),
   }),
 });
 
@@ -443,7 +444,7 @@ Run:
 npm run check
 ```
 
-Expected: FAIL because pages and layouts are not created yet, but content schema errors should not appear.
+Expected: exit 0 with the current Astro missing-pages warning, no content schema errors, and no deprecated `z` / `.url()` hints from content schemas.
 
 - [ ] **Step 7: Commit content setup**
 
