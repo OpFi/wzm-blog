@@ -472,14 +472,14 @@ export const site = {
   description: "A creator-studio personal website for projects, long-form writing, and short notes.",
   url: "https://syd-studio.vercel.app",
   author: "Syd",
-};
+} as const;
 
 export const navItems = [
   { href: "/projects/", label: "Projects" },
   { href: "/writing/", label: "Writing" },
   { href: "/notes/", label: "Notes" },
   { href: "/about/", label: "About" },
-];
+] as const;
 ```
 
 - [ ] **Step 2: Add content query helpers**
@@ -508,32 +508,33 @@ export function formatDate(date: Date) {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   }).format(date);
 }
 
 export async function getProjects() {
   const projects = await getCollection("projects");
-  return projects.sort(byDateDesc);
+  return [...projects].sort(byDateDesc);
 }
 
-export async function getFeaturedProject() {
+export async function getFeaturedProject(): Promise<ProjectEntry | undefined> {
   const projects = await getProjects();
   return projects.find((project) => project.data.featured) ?? projects[0];
 }
 
 export async function getPublishedWriting() {
   const entries = await getCollection("writing", ({ data }) => !data.draft);
-  return entries.sort(byDateDesc);
+  return [...entries].sort(byDateDesc);
 }
 
-export async function getFeaturedWriting() {
+export async function getFeaturedWriting(): Promise<WritingEntry | undefined> {
   const entries = await getPublishedWriting();
   return entries.find((entry) => entry.data.featured) ?? entries[0];
 }
 
 export async function getPublishedNotes() {
   const entries = await getCollection("notes", ({ data }) => !data.draft);
-  return entries.sort(byDateDesc);
+  return [...entries].sort(byDateDesc);
 }
 ```
 

@@ -5,11 +5,11 @@ export const site = {
     "A creator-studio personal website for projects, long-form writing, and short notes.",
   url: "https://syd-studio.vercel.app",
   author: "Syd",
-};
+} as const;
 
 export const navItems = [
   { href: "/projects/", label: "Projects" },
   { href: "/writing/", label: "Writing" },
   { href: "/notes/", label: "Notes" },
   { href: "/about/", label: "About" },
-];
+] as const;
