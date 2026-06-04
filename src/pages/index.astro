@@ -2,75 +2,118 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import StatusPanel from "../components/StatusPanel.astro";
-import { formatDate, getFeaturedProject, getLatestUpdates } from "../lib/content";
+import { friendLinks } from "../lib/friends";
+import { formatDate, getFeaturedProject, getPublishedWriting, getLatestUpdates } from "../lib/content";
 
 const featuredProject = await getFeaturedProject();
+const featuredArticles = (await getPublishedWriting()).slice(0, 4);
 const latestUpdates = await getLatestUpdates(6);
 const categories = [
-  { href: "/writing/", label: "技术", description: "实现记录、工具链、部署和工程取舍。" },
-  { href: "/notes/", label: "随笔", description: "还没有展开成文章的观察和片段。" },
-  { href: "/daily/", label: "日常", description: "更靠近生活现场的小记录。" },
-  { href: "/projects/", label: "项目", description: "正在打磨或已经完成的作品。" },
+  { href: "/writing/", label: "技术", description: "前端、部署、内容系统和工程复盘。" },
+  { href: "/notes/", label: "随笔", description: "一些短想法、阅读摘录和产品观察。" },
+  { href: "/daily/", label: "日常", description: "靠近日常现场的小记录。" },
+  { href: "/projects/", label: "项目", description: "个人工具、博客系统和原型作品。" },
 ];
 ---
 
 <BaseLayout>
-  <section class="border-y border-slate-200 bg-[linear-gradient(135deg,rgba(248,250,252,0.96),rgba(239,246,255,0.88)_48%,rgba(240,253,244,0.86))]">
-    <div class="mx-auto grid w-full max-w-6xl gap-8 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1fr_22rem]">
+  <section class="border-y border-emerald-900/10 bg-[radial-gradient(circle_at_12%_8%,rgba(187,247,208,0.55),transparent_32%),linear-gradient(135deg,#f5fbf2,#ecfdf5_46%,#f7fee7)]">
+    <div class="mx-auto grid w-full max-w-6xl gap-8 px-5 py-12 sm:px-8 sm:py-14 lg:grid-cols-[1fr_21rem]">
       <div class="max-w-3xl">
-        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">个人博客 / 技术写作 / 日常记录</p>
-        <h1 class="mt-4 font-serif text-4xl font-black leading-tight text-slate-950 sm:text-6xl">
-          写代码，也写下代码背后的生活。
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">绿色主题 / 中文博客 / 技术与生活</p>
+        <h1 class="mt-4 font-serif text-4xl font-black leading-tight text-emerald-950 sm:text-6xl">
+          在叶子的缝隙里，写代码和生活。
         </h1>
-        <p class="mt-6 text-lg leading-8 text-slate-700">
-          我是王子明。这里放技术实现、产品取舍、个人项目和一些日常片段。它不急着成为一本完整的书，更像一张持续更新的工作桌。
+        <p class="mt-6 text-lg leading-8 text-emerald-950/80">
+          这里是王子明的个人博客，记录 Web 开发、项目复盘、读书摘录和一些日常片段。页面会尽量保持轻、绿、干净，像一块可以长期更新的草地。
         </p>
         <div class="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
-          <a class="rounded-full bg-slate-950 px-4 py-2 text-white transition hover:bg-slate-800" href="/writing/">读技术文章</a>
-          <a class="rounded-full border border-slate-300 bg-white/70 px-4 py-2 text-slate-800 transition hover:border-slate-500" href="/daily/">看日常记录</a>
-          <a class="rounded-full border border-slate-300 bg-white/70 px-4 py-2 text-slate-800 transition hover:border-slate-500" href="/about/">关于我</a>
+          <a class="rounded-full bg-emerald-800 px-4 py-2 text-white shadow-sm transition hover:bg-emerald-900" href="/writing/">精选文章</a>
+          <a class="rounded-full border border-emerald-300 bg-white/70 px-4 py-2 text-emerald-900 transition hover:border-emerald-600" href="/notes/">随笔杂记</a>
+          <a class="rounded-full border border-emerald-300 bg-white/70 px-4 py-2 text-emerald-900 transition hover:border-emerald-600" href="/projects/">看看项目</a>
         </div>
       </div>
       <StatusPanel />
     </div>
   </section>
 
-  <section class="bg-white/80 px-5 py-12 sm:px-8">
-    <div class="mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1fr_20rem]">
-      <div>
-        <div class="mb-6">
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">最新更新</p>
-          <h2 class="mt-2 text-3xl font-black text-slate-950">最近写下的东西</h2>
-        </div>
-        <div class="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white shadow-sm">
-          {latestUpdates.map((update) => (
-            <a class="block px-5 py-5 transition hover:bg-slate-50" href={update.href}>
-              <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-                <p class="text-sm font-semibold text-slate-500">{update.type}</p>
-                <time class="text-xs text-slate-500" datetime={update.entry.data.date.toISOString()}>{formatDate(update.entry.data.date)}</time>
-              </div>
-              <h3 class="mt-2 text-xl font-bold leading-tight text-slate-950">{update.entry.data.title}</h3>
-              <p class="mt-2 text-sm leading-6 text-slate-600">{update.entry.data.description}</p>
-            </a>
-          ))}
-        </div>
+  <section class="px-5 py-12 sm:px-8">
+    <div class="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_20rem]">
+      <div class="grid gap-8">
+        <section>
+          <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.12em] text-emerald-700">精选文章</p>
+              <h2 class="mt-2 text-3xl font-black text-emerald-950">值得先读的几篇</h2>
+            </div>
+            <a class="text-sm font-semibold text-emerald-700 hover:text-emerald-900" href="/writing/">查看全部技术文章</a>
+          </div>
+          <div class="grid gap-4">
+            {featuredArticles.map((article) => (
+              <article class="rounded-lg border border-emerald-900/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <a class="block" href={`/writing/${article.id}/`}>
+                  <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+                    <p class="text-sm font-semibold text-emerald-700">文章 · {article.data.tags[0] ?? "技术"}</p>
+                    <time class="text-xs text-emerald-950/55" datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+                  </div>
+                  <h3 class="mt-3 text-2xl font-bold leading-tight text-emerald-950">{article.data.title}</h3>
+                  <p class="mt-3 text-sm leading-6 text-emerald-950/70">{article.data.description}</p>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div class="mb-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.12em] text-emerald-700">最新更新</p>
+            <h2 class="mt-2 text-3xl font-black text-emerald-950">最近写下的东西</h2>
+          </div>
+          <div class="divide-y divide-emerald-900/10 rounded-lg border border-emerald-900/10 bg-white shadow-sm">
+            {latestUpdates.map((update) => (
+              <a class="block px-5 py-5 transition hover:bg-emerald-50" href={update.href}>
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+                  <p class="text-sm font-semibold text-emerald-700">{update.type}</p>
+                  <time class="text-xs text-emerald-950/55" datetime={update.entry.data.date.toISOString()}>{formatDate(update.entry.data.date)}</time>
+                </div>
+                <h3 class="mt-2 text-xl font-bold leading-tight text-emerald-950">{update.entry.data.title}</h3>
+                <p class="mt-2 text-sm leading-6 text-emerald-950/70">{update.entry.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div class="mb-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.12em] text-emerald-700">友情链接</p>
+            <h2 class="mt-2 text-3xl font-black text-emerald-950">一些路过也值得停下的小站</h2>
+          </div>
+          <div class="grid gap-4 md:grid-cols-2">
+            {friendLinks.map((friend) => (
+              <a class="rounded-lg border border-emerald-900/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" href={friend.href} target="_blank" rel="noopener noreferrer">
+                <h3 class="text-lg font-bold text-emerald-950">{friend.name}</h3>
+                <p class="mt-2 text-sm leading-6 text-emerald-950/70">{friend.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
       </div>
 
       <aside class="grid gap-5">
         <section>
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">分类索引</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-emerald-700">分类索引</p>
           <div class="mt-3 grid gap-3">
             {categories.map((category) => (
-              <a class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" href={category.href}>
-                <h2 class="text-lg font-bold text-slate-950">{category.label}</h2>
-                <p class="mt-2 text-sm leading-6 text-slate-600">{category.description}</p>
+              <a class="rounded-lg border border-emerald-900/10 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" href={category.href}>
+                <h2 class="text-lg font-bold text-emerald-950">{category.label}</h2>
+                <p class="mt-2 text-sm leading-6 text-emerald-950/70">{category.description}</p>
               </a>
             ))}
           </div>
         </section>
         {featuredProject && (
           <section>
-            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">正在做</p>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-emerald-700">正在做</p>
             <ProjectCard project={featuredProject} />
           </section>
         )}
