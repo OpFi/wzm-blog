@@ -1,5 +1,5 @@
 ---
-import { navItems, site } from "../lib/site";
+import { navItems } from "../lib/site";
 
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -7,12 +7,12 @@ const isActive = (href: string) =>
 const isCurrentPage = (href: string) => currentPath === href;
 ---
 
-<header class="mx-auto flex w-full max-w-6xl flex-col items-start gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:px-8">
-  <a class="text-sm font-extrabold tracking-tight" href="/" aria-label={`${site.name} home`}>
-    {site.name}
+<header class="mx-auto flex w-full max-w-6xl items-center justify-between gap-5 px-6 py-5 sm:px-10">
+  <a class="shrink-0 rounded-md transition hover:opacity-80" href="/" aria-label="返回首页">
+    <img class="h-10 w-auto" src="/images/blog-logo.svg" alt="绿色书本羽毛 Logo" width="75" height="40" />
   </a>
   <nav class="w-full sm:w-auto" aria-label="Primary navigation">
-    <ul class="flex flex-wrap items-center gap-2 text-xs text-slate-600 sm:gap-6 sm:text-sm">
+    <ul class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-600 sm:justify-end sm:gap-6 sm:text-sm">
       {
         navItems.map((item) => {
           const active = isActive(item.href);
@@ -22,7 +22,7 @@ const isCurrentPage = (href: string) => currentPath === href;
             <li>
               <a
                 class:list={[
-                  "rounded-full px-2 py-1 transition hover:text-slate-950",
+                  "rounded-full px-3 py-1.5 transition hover:text-slate-950",
                   active && "bg-white/70 text-slate-950 shadow-sm",
                 ]}
                 href={item.href}

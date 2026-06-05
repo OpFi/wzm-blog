@@ -1,0 +1,735 @@
+---
+import { formatDate } from "../lib/content";
+
+export interface ArticleIndexItem {
+  href: string;
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  type: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  items: ArticleIndexItem[];
+  emptyText: string;
+  listAriaLabel: string;
+  filterAriaLabel: string;
+  searchPlaceholder: string;
+  dataNamespace: "writing" | "notes";
+  pageSize?: number;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  items,
+  emptyText,
+  listAriaLabel,
+  filterAriaLabel,
+  searchPlaceholder,
+  dataNamespace,
+  pageSize = 5,
+} = Astro.props;
+const tagCounts = items.reduce<Map<string, number>>((counts, item) => {
+  for (const tag of item.tags) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+
+  return counts;
+}, new Map());
+const tags = [...tagCounts.entries()].sort(
+  ([tagA, countA], [tagB, countB]) => countB - countA || tagA.localeCompare(tagB, "zh-CN"),
+);
+const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+const namespaceSearchAttrs = dataNamespace === "writing" ? { "data-writing-search": "" } : { "data-notes-search": "" };
+const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": "" } : { "data-notes-card": "" };
+---
+
+<section
+  class="index-page"
+  data-index-root
+  data-page-size={pageSize}
+  data-page-namespace={dataNamespace}
+>
+  <header class="index-hero">
+    <p>{eyebrow}</p>
+    <h1>{title}</h1>
+    <span>{description}</span>
+  </header>
+
+  <div class="index-layout">
+    <section class="index-list" aria-label={listAriaLabel}>
+      {items.length > 0 ? (
+        <>
+          <div class="index-cards">
+            {items.map((item, index) => {
+              const primaryTag = item.tags[0] ?? item.type;
+              const views = 21 + index * 17 + item.title.length;
+              const likes = (index * 3 + 2) % 8 + 1;
+              const comments = (index + 2) % 5;
+
+              return (
+                <article
+                  class="article-card"
+                  data-index-card
+                  data-title={item.title}
+                  data-description={item.description}
+                  data-tags={item.tags.join("|")}
+                  data-index={index}
+                  {...namespaceCardAttrs}
+                >
+                  <a class="article-link" href={item.href}>
+                    <div class="article-head">
+                      <span>{item.type}</span>
+                      <time datetime={item.date.toISOString()}>{formatDate(item.date)}</time>
+                    </div>
+                    <h2>{item.title}</h2>
+                    <p>{item.description}</p>
+                    <div class="article-meta" aria-label={`${item.title} 元信息`}>
+                      <span>{item.type}</span>
+                      <span>{primaryTag}</span>
+                      <span class="view-count">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M2.8 12s3.3-5.7 9.2-5.7S21.2 12 21.2 12s-3.3 5.7-9.2 5.7S2.8 12 2.8 12Z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                          />
+                          <circle cx="12" cy="12" r="2.4" fill="currentColor" />
+                        </svg>
+                        {views}
+                      </span>
+                      <span>{formatDate(item.date)}</span>
+                    </div>
+                  </a>
+                  <div class="article-actions" aria-hidden="true">
+                    <span>喜欢 {likes}</span>
+                    <span>回应 {comments}</span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <p class="index-empty" data-index-empty hidden>没有找到匹配的文章。</p>
+          <nav class="index-pagination" data-pagination aria-label={`${title}分页`} hidden={items.length <= pageSize}>
+            <button type="button" data-page-prev aria-label="上一页">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m15 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </button>
+            <input
+              class="page-input"
+              data-page-input
+              data-page-current
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              value="1"
+              aria-label="输入页码"
+            />
+            <span class="page-slash">/</span>
+            <span data-page-total>{totalPages}</span>
+            <button type="button" data-page-next aria-label="下一页">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </button>
+          </nav>
+        </>
+      ) : (
+        <p class="index-empty">{emptyText}</p>
+      )}
+    </section>
+
+    <aside class="index-filter-card" data-filter-card aria-label={filterAriaLabel}>
+      <label class="index-search-box">
+        <span class="sr-only">{searchPlaceholder}</span>
+        <input data-index-search {...namespaceSearchAttrs} type="search" placeholder={searchPlaceholder} autocomplete="off" />
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+          <path
+            d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </label>
+
+      <h2>文章标签</h2>
+      <div class="index-tag-filters">
+        <button class="is-active" type="button" data-filter-tag="全部" aria-pressed="true">
+          全部 {items.length} 篇
+        </button>
+        {tags.map(([tag, count]) => (
+          <button type="button" data-filter-tag={tag} aria-pressed="false">
+            {tag} {count} 篇
+          </button>
+        ))}
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script is:inline>
+  const writingFilterState = new WeakMap();
+  const indexRoots = document.querySelectorAll("[data-index-root]");
+
+  function normalizeIndexValue(value) {
+    return value.trim().toLowerCase();
+  }
+
+  function getIndexCardText(card) {
+    const title = card.getAttribute("data-title") ?? "";
+    const description = card.getAttribute("data-description") ?? "";
+    const tags = card.getAttribute("data-tags") ?? "";
+
+    return normalizeIndexValue(`${title} ${description} ${tags.replaceAll("|", " ")}`);
+  }
+
+  function updateArticleIndex(root) {
+    const state = writingFilterState.get(root);
+    if (!state) {
+      return;
+    }
+
+    const cards = [...root.querySelectorAll("[data-index-card]")];
+    const tagButtons = [...root.querySelectorAll("[data-filter-tag]")];
+    const emptyState = root.querySelector("[data-index-empty]");
+    const pagination = root.querySelector("[data-pagination]");
+    const currentPage = root.querySelector("[data-page-current]");
+    const totalPage = root.querySelector("[data-page-total]");
+    const previousButton = root.querySelector("[data-page-prev]");
+    const nextButton = root.querySelector("[data-page-next]");
+    const query = normalizeIndexValue(state.query);
+    const filteredCards = cards.filter((card) => {
+      const tagText = card.getAttribute("data-tags") ?? "";
+      const matchesTag = state.tag === "全部" || tagText.split("|").includes(state.tag);
+      const matchesQuery = !query || getIndexCardText(card).includes(query);
+
+      return matchesTag && matchesQuery;
+    });
+    const totalPages = Math.max(1, Math.ceil(filteredCards.length / state.pageSize));
+
+    state.totalPages = totalPages;
+    state.page = Math.min(state.page, totalPages);
+
+    const pageStart = (state.page - 1) * state.pageSize;
+    const pageEnd = pageStart + state.pageSize;
+
+    for (const card of cards) {
+      card.hidden = true;
+    }
+
+    filteredCards.forEach((card, index) => {
+      card.hidden = index < pageStart || index >= pageEnd;
+    });
+
+    for (const button of tagButtons) {
+      const isActive = button.getAttribute("data-filter-tag") === state.tag;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    }
+
+    if (emptyState) {
+      emptyState.hidden = filteredCards.length > 0;
+    }
+
+    if (pagination && currentPage && totalPage && previousButton && nextButton) {
+      pagination.hidden = filteredCards.length <= state.pageSize;
+      currentPage.value = String(state.page);
+      totalPage.textContent = String(totalPages);
+      previousButton.disabled = state.page <= 1;
+      nextButton.disabled = state.page >= totalPages;
+    }
+  }
+
+  function paginationJumpToPage(root) {
+    const state = writingFilterState.get(root);
+    const pageInput = root.querySelector("[data-page-input]");
+
+    if (!state || !pageInput) {
+      return;
+    }
+
+    const requestedPage = Number.parseInt(pageInput.value, 10);
+
+    if (Number.isNaN(requestedPage)) {
+      pageInput.value = String(state.page);
+      return;
+    }
+
+    state.page = Math.min(Math.max(requestedPage, 1), state.totalPages || 1);
+    updateArticleIndex(root);
+  }
+
+  for (const root of indexRoots) {
+    const searchInput = root.querySelector("[data-index-search]");
+    const tagButtons = [...root.querySelectorAll("[data-filter-tag]")];
+    const previousButton = root.querySelector("[data-page-prev]");
+    const nextButton = root.querySelector("[data-page-next]");
+    const pageInput = root.querySelector("[data-page-input]");
+    const pageSize = Number(root.getAttribute("data-page-size")) || 5;
+    const state = {
+      query: "",
+      tag: "全部",
+      page: 1,
+      pageSize,
+      totalPages: 1,
+    };
+
+    writingFilterState.set(root, state);
+
+    searchInput?.addEventListener("input", () => {
+      state.query = searchInput.value;
+      state.page = 1;
+      updateArticleIndex(root);
+    });
+
+    for (const button of tagButtons) {
+      button.addEventListener("click", () => {
+        state.tag = button.getAttribute("data-filter-tag") ?? "全部";
+        state.page = 1;
+        updateArticleIndex(root);
+      });
+    }
+
+    previousButton?.addEventListener("click", () => {
+      state.page = Math.max(1, state.page - 1);
+      updateArticleIndex(root);
+    });
+
+    nextButton?.addEventListener("click", () => {
+      state.page += 1;
+      updateArticleIndex(root);
+    });
+
+    pageInput?.addEventListener("focus", () => {
+      pageInput.select();
+    });
+
+    pageInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        paginationJumpToPage(root);
+        pageInput.blur();
+      }
+    });
+
+    pageInput?.addEventListener("blur", () => {
+      paginationJumpToPage(root);
+    });
+
+    updateArticleIndex(root);
+  }
+</script>
+
+<style>
+  .index-page {
+    min-height: 100%;
+    padding: 2rem 1.25rem 4rem;
+    background:
+      linear-gradient(180deg, rgba(246, 252, 244, 0.95), rgba(250, 253, 247, 0.92)),
+      linear-gradient(135deg, rgba(220, 252, 231, 0.34), transparent 44%),
+      var(--paper);
+    color: var(--ink);
+  }
+
+  .index-hero {
+    width: min(100%, 70rem);
+    margin: 0 auto 2rem;
+  }
+
+  .index-hero p {
+    margin: 0;
+    color: #3b7c52;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+  }
+
+  .index-hero h1 {
+    margin: 0.7rem 0 0;
+    color: #14532d;
+    font-size: clamp(2.1rem, 4.7vw, 3.2rem);
+    font-weight: 950;
+    letter-spacing: 0;
+    line-height: 1.08;
+  }
+
+  .index-hero span {
+    display: block;
+    max-width: 42rem;
+    margin-top: 0.9rem;
+    color: #557264;
+    font-size: 1.02rem;
+    line-height: 1.85;
+  }
+
+  .index-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 1.25rem;
+    width: min(100%, 70rem);
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .index-cards {
+    display: grid;
+    gap: 1rem;
+  }
+
+  [data-index-card][hidden],
+  .index-empty[hidden],
+  .index-pagination[hidden] {
+    display: none;
+  }
+
+  .article-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(21, 128, 61, 0.16);
+    border-radius: 10px;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(247, 253, 248, 0.9)),
+      #fff;
+    box-shadow: 0 16px 38px rgba(20, 83, 45, 0.07);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .article-card:hover {
+    border-color: rgba(5, 150, 105, 0.28);
+    box-shadow: 0 18px 42px rgba(5, 150, 105, 0.11);
+    transform: translateY(-1px);
+  }
+
+  .article-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(180deg, #bbf7d0, #059669);
+    opacity: 0.72;
+  }
+
+  .article-link {
+    display: block;
+    padding: 1.25rem 1.35rem 1.1rem;
+  }
+
+  .article-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: #047857;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .article-head time {
+    color: rgba(23, 53, 40, 0.55);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .article-card h2 {
+    margin: 0.55rem 0 0;
+    color: #14532d;
+    font-size: clamp(1.1rem, 2vw, 1.28rem);
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 1.35;
+  }
+
+  .article-card p {
+    display: -webkit-box;
+    margin: 0.58rem 0 0;
+    overflow: hidden;
+    color: rgba(23, 53, 40, 0.78);
+    font-size: 0.9rem;
+    line-height: 1.85;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.78rem;
+    color: rgba(23, 53, 40, 0.6);
+    font-size: 0.75rem;
+  }
+
+  .article-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.24rem;
+  }
+
+  .article-meta span + span::before {
+    content: "/";
+    margin-right: 0.45rem;
+    color: rgba(5, 150, 105, 0.36);
+  }
+
+  .view-count svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .article-actions {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.9rem;
+    display: flex;
+    gap: 0.4rem;
+    color: #047857;
+    font-size: 0.72rem;
+  }
+
+  .article-actions span {
+    border: 1px solid rgba(5, 150, 105, 0.22);
+    border-radius: 999px;
+    background: rgba(240, 253, 244, 0.82);
+    padding: 0.1rem 0.48rem;
+  }
+
+  .index-empty {
+    margin: 0;
+    border: 1px solid rgba(21, 128, 61, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.84);
+    padding: 1.15rem 1.25rem;
+    color: #557264;
+    box-shadow: 0 16px 34px rgba(20, 83, 45, 0.08);
+  }
+
+  .index-filter-card {
+    position: sticky;
+    top: 1rem;
+    border: 1px solid rgba(21, 128, 61, 0.16);
+    border-radius: 12px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 253, 248, 0.92)),
+      #fff;
+    box-shadow: 0 18px 42px rgba(20, 83, 45, 0.08);
+    padding: 1.2rem;
+  }
+
+  .index-search-box {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.7rem;
+    border: 1px solid rgba(21, 128, 61, 0.3);
+    border-radius: 8px;
+    background: #fffefa;
+    padding: 0.72rem 0.9rem;
+    color: #224636;
+  }
+
+  .index-search-box:focus-within {
+    border-color: rgba(22, 163, 74, 0.68);
+    box-shadow: 0 0 0 3px rgba(187, 247, 208, 0.55);
+  }
+
+  .index-search-box input {
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #173528;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 650;
+  }
+
+  .index-search-box input::placeholder {
+    color: #7aa489;
+  }
+
+  .index-search-box svg {
+    width: 1.22rem;
+    height: 1.22rem;
+    color: #1d3b2e;
+  }
+
+  .index-filter-card h2 {
+    margin: 1.35rem 0 0.85rem;
+    color: #123024;
+    font-size: 1.25rem;
+    font-weight: 950;
+    line-height: 1.2;
+  }
+
+  .index-tag-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.58rem;
+  }
+
+  .index-tag-filters button {
+    min-height: 2.1rem;
+    border: 1px solid rgba(21, 128, 61, 0.24);
+    border-radius: 8px;
+    background: #fbfff7;
+    padding: 0.35rem 0.72rem;
+    color: #386a4c;
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 750;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 5px 12px rgba(20, 83, 45, 0.08);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      background 0.18s ease,
+      color 0.18s ease;
+  }
+
+  .index-tag-filters button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(21, 128, 61, 0.42);
+  }
+
+  .index-tag-filters button.is-active {
+    border-color: #15803d;
+    background: #15803d;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(21, 128, 61, 0.22);
+  }
+
+  .index-pagination {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.48rem;
+    margin: 1.2rem 0 0 0.15rem;
+    color: #123024;
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .index-pagination button {
+    display: grid;
+    width: 1.8rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #2f5f43;
+    cursor: pointer;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .index-pagination button:hover:not(:disabled) {
+    background: rgba(220, 252, 231, 0.7);
+    color: #15803d;
+  }
+
+  .index-pagination button:disabled {
+    cursor: default;
+    opacity: 0.32;
+  }
+
+  .index-pagination svg {
+    width: 1.08rem;
+    height: 1.08rem;
+  }
+
+  .page-input {
+    width: 2.7rem;
+    height: 1.92rem;
+    border: 1px solid rgba(21, 128, 61, 0.2);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #123024;
+    font: inherit;
+    padding: 0.2rem 0.35rem;
+    text-align: center;
+    outline: 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  .page-input:focus {
+    border-color: rgba(22, 163, 74, 0.72);
+    box-shadow: 0 0 0 3px rgba(187, 247, 208, 0.48);
+  }
+
+  .page-slash {
+    color: rgba(18, 48, 36, 0.75);
+  }
+
+  @media (max-width: 900px) {
+    .index-page {
+      padding-top: 1.6rem;
+    }
+
+    .index-hero,
+    .index-layout {
+      max-width: 42rem;
+    }
+
+    .index-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .index-filter-card {
+      position: static;
+      order: -1;
+    }
+
+    .article-actions {
+      position: static;
+      justify-content: flex-end;
+      padding: 0 1.25rem 1rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .index-page {
+      padding-inline: 0.9rem;
+    }
+
+    .article-link {
+      padding: 1.1rem 1rem 0.95rem;
+    }
+
+    .article-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .article-meta span + span::before {
+      content: "";
+      margin: 0;
+    }
+
+    .index-pagination {
+      gap: 0.42rem;
+      font-size: 0.88rem;
+    }
+
+    .page-input {
+      width: 2.5rem;
+    }
+  }
+</style>

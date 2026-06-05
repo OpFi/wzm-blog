@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 96" role="img" aria-labelledby="title desc">
+  <title id="title">绿色书本羽毛 Logo</title>
+  <desc id="desc">一本打开的绿色书，右侧有一支羽毛笔。</desc>
+  <defs>
+    <linearGradient id="green" x1="20" x2="160" y1="18" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22c55e" />
+      <stop offset="0.52" stop-color="#059669" />
+      <stop offset="1" stop-color="#047857" />
+    </linearGradient>
+    <linearGradient id="soft" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ecfccb" />
+      <stop offset="1" stop-color="#bbf7d0" />
+    </linearGradient>
+  </defs>
+  <rect width="180" height="96" rx="18" fill="url(#soft)" opacity="0.35" />
+  <path
+    d="M26 70c22-7 42-6 64 9 22-15 44-16 64-9M26 28c22-7 42-4 64 12 22-16 44-19 64-12v52c-21-7-42-4-64 11-22-15-43-18-64-11Z"
+    fill="none"
+    stroke="url(#green)"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="6"
+  />
+  <path
+    d="M90 40v51M38 57c11-10 20-12 30-2 6 6 13 8 20 2"
+    fill="none"
+    stroke="url(#green)"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="5"
+  />
+  <path
+    d="M117 71c2-21 12-39 31-53 11 20 5 40-17 55Z"
+    fill="url(#green)"
+    opacity="0.96"
+  />
+  <path
+    d="M115 78c12-26 24-43 43-58"
+    fill="none"
+    stroke="#f7fee7"
+    stroke-linecap="round"
+    stroke-width="4"
+  />
+  <path
+    d="M123 55c-8 8-12 17-13 28M134 49c9-1 16-4 23-9M129 65c9-2 17-5 25-10"
+    fill="none"
+    stroke="#f7fee7"
+    stroke-linecap="round"
+    stroke-width="3"
+    opacity="0.78"
+  />
+  <path d="M109 82l10 5-9 8Z" fill="#047857" />
+</svg>
