@@ -4,7 +4,7 @@ import ContentLayout from "../../layouts/ContentLayout.astro";
 import TagList from "../../components/TagList.astro";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
+  const projects = (await getCollection("projects")).filter((project) => project.id === "personal-blog-system");
   return projects.map((project) => ({
     params: { slug: project.id },
     props: { project },

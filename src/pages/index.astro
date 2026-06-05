@@ -27,7 +27,6 @@ const stats = [
           selectedArticles.map((item, index) => {
             const views = 68 + index * 23 + item.entry.data.title.length;
             const likes = (index * 2 + 3) % 9 + 1;
-            const comments = (index + 1) % 4;
             const tag = item.entry.data.tags[0] ?? item.type;
 
             return (
@@ -47,7 +46,6 @@ const stats = [
                 </a>
                 <div class="article-actions" aria-hidden="true">
                   <span>喜欢 {likes}</span>
-                  <span>回应 {comments}</span>
                 </div>
               </article>
             );

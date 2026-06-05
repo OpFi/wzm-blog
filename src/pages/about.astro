@@ -2,34 +2,352 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="关于" description="关于王子明的工作方式、关注方向和联系方式。">
-  <section class="mx-auto grid w-full max-w-6xl gap-8 px-5 py-12 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
-    <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">关于我</p>
-      <h1 class="mt-3 text-4xl font-black text-slate-950 sm:text-5xl">我在做 Web 产品，也在整理自己的长期写作系统。</h1>
-    </div>
-    <div class="prose-content rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      <p>
-        你好，我是王子明。这个网站是我的公开工作台，用来记录正在构建的项目、写得更完整的技术文章，以及一些短一点的开发随记。
-      </p>
-      <p>
-        我关心的是小团队也能长期维护的产品：清晰的信息架构、稳定的发布流程、顺手的内容系统，以及那些让人少走弯路的界面细节。
-      </p>
-      <h2>关注方向</h2>
-      <ul>
-        <li>Astro、React、内容集合和静态站点部署。</li>
-        <li>产品原型、后台工具、个人知识管理和写作工作流。</li>
-        <li>把开发过程写清楚：为什么这样做，哪里踩坑，下一步怎么收敛。</li>
-      </ul>
-      <h2>联系方式</h2>
-      <ul>
-        <li>
-          邮箱：<a href="mailto:1900074789@qq.com">1900074789@qq.com</a>
-        </li>
-        <li>
-          GitHub：<a href="https://github.com/OpFi">github.com/OpFi</a>
-        </li>
-      </ul>
-    </div>
-  </section>
+<BaseLayout title="关于" description="写给来到这里的你的信，关于小志的工作方式、兴趣爱好和联系方式。">
+  <main class="letter-page">
+    <article class="about-letter" aria-label="写给来访者的信">
+      <div class="letter-stamp" aria-hidden="true">
+        <img src="/images/about-character.svg" alt="" width="128" height="122" />
+        <span>小志的书桌</span>
+      </div>
+
+      <header class="letter-head">
+        <p>关于我</p>
+        <h1>给来到这里的你</h1>
+        <time datetime="2026-06-05">2026年6月5日</time>
+      </header>
+
+      <div class="letter-line" aria-hidden="true"></div>
+
+      <div class="letter-body">
+        <p class="salutation">亲爱的来访者：</p>
+        <p>
+          很高兴你打开这个页面。这里不像一份正式简历，更像我夹在网站里的一封信：慢一点说清楚我是谁、我在做什么，以及我为什么愿意把这些东西长期写下来。
+        </p>
+        <p>
+          如果你是从一篇文章、一个项目，或者某个搜索结果来到这里，希望这封信能帮你更快认识这个网站背后的人。
+        </p>
+
+        <section class="letter-section" aria-labelledby="about-introduction">
+          <h2 id="about-introduction">我是谁</h2>
+          <p>
+            你好，我是小志，一名喜欢把想法做成页面、工具和长期内容系统的前端开发者。这个网站是我的公开工作台，我会在这里整理技术文章、记录生活点滴，也把个人项目的迭代过程留下来。
+          </p>
+          <p>
+            我偏爱清晰、耐看的界面，也喜欢把复杂问题拆成能一点点完成的小步骤。比起追求炫技，我更在意作品能不能长期维护、长期被自己使用。
+          </p>
+        </section>
+
+        <section class="letter-section" aria-labelledby="about-hobbies">
+          <h2 id="about-hobbies">我喜欢什么</h2>
+          <div class="letter-notes">
+            <section>
+              <h3>游戏</h3>
+              <p>游戏经常给我新的灵感：关卡节奏、任务反馈、界面提示和世界观细节，都能反过来帮助我理解产品体验。</p>
+            </section>
+            <section>
+              <h3>写作</h3>
+              <p>我喜欢把学到的东西写下来。写作会逼着我把含糊的经验重新组织成清楚的判断，也方便以后回头复盘。</p>
+            </section>
+            <section>
+              <h3>分享</h3>
+              <p>我希望这个网站不只是作品展示，也是一处能交换想法的地方。技术、生活、项目踩坑，都可以慢慢沉淀在这里。</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="letter-section letter-postscript" aria-labelledby="about-postscript">
+          <h2 id="about-postscript">附言</h2>
+          <p>如果你想聊聊技术文章、个人网站、项目想法，或者只是打个招呼，可以从下面这些地方找到我。</p>
+          <ul class="contact-list">
+            <li>
+              <span>QQ</span>
+              <a href="/images/qq-qr.jpg" target="_blank" rel="noopener noreferrer">扫码联系</a>
+            </li>
+            <li>
+              <span>微信</span>
+              <a href="/images/wechat-qr.png" target="_blank" rel="noopener noreferrer">扫码联系</a>
+            </li>
+            <li>
+              <span>邮箱</span>
+              <a href="mailto:1900074789@qq.com">1900074789@qq.com</a>
+            </li>
+            <li>
+              <span>GitHub</span>
+              <a href="https://github.com/OpFi" target="_blank" rel="noopener noreferrer">github.com/OpFi</a>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="letter-signature" aria-label="署名">
+        <span>小志</span>
+        <time datetime="2026-06-05">写于 2026年6月5日</time>
+      </div>
+    </article>
+  </main>
 </BaseLayout>
+
+<style>
+  .letter-page {
+    min-height: 100%;
+    padding: 2rem 1.25rem 4rem;
+    background:
+      radial-gradient(circle at 10% 8%, rgba(187, 247, 208, 0.38), transparent 32%),
+      linear-gradient(180deg, rgba(246, 252, 244, 0.96), rgba(250, 253, 247, 0.94)),
+      var(--paper);
+    color: #173528;
+  }
+
+  .about-letter {
+    position: relative;
+    width: min(100%, 62rem);
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid rgba(21, 128, 61, 0.18);
+    border-radius: 12px;
+    background:
+      linear-gradient(90deg, rgba(21, 128, 61, 0.07) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(21, 128, 61, 0.05) 0 1px, transparent 1px 2.35rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 253, 248, 0.96));
+    background-size: 100% 100%, 100% 2.35rem, 100% 100%;
+    box-shadow:
+      0 24px 60px rgba(20, 83, 45, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    padding: 3rem;
+  }
+
+  .about-letter::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 2.1rem;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(21, 128, 61, 0.2) 10%, rgba(21, 128, 61, 0.2) 88%, transparent);
+  }
+
+  .about-letter::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-style: solid;
+    border-width: 0 4.6rem 4.6rem 0;
+    border-color: transparent rgba(220, 252, 231, 0.78) transparent transparent;
+    filter: drop-shadow(-0.4rem 0.4rem 0.8rem rgba(20, 83, 45, 0.08));
+  }
+
+  .letter-stamp {
+    position: absolute;
+    right: 2.6rem;
+    top: 2rem;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    width: 8rem;
+    rotate: 4deg;
+    color: rgba(20, 83, 45, 0.58);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .letter-stamp img {
+    width: 6.2rem;
+    height: auto;
+    opacity: 0.88;
+    filter: drop-shadow(0 0.8rem 1.2rem rgba(20, 83, 45, 0.12));
+  }
+
+  .letter-head {
+    max-width: 36rem;
+    padding-right: 8.5rem;
+  }
+
+  .letter-head p {
+    margin: 0;
+    color: #3b7c52;
+    font-size: 0.78rem;
+    font-weight: 850;
+    letter-spacing: 0;
+  }
+
+  .letter-head h1 {
+    margin: 0.65rem 0 0;
+    color: #14532d;
+    font-size: 3.35rem;
+    font-weight: 950;
+    letter-spacing: 0;
+    line-height: 1.08;
+  }
+
+  .letter-head time {
+    display: block;
+    margin-top: 0.85rem;
+    color: #6e8875;
+    font-size: 0.92rem;
+  }
+
+  .letter-line {
+    width: min(100%, 36rem);
+    height: 1px;
+    margin: 2rem 0 2.2rem;
+    background: linear-gradient(90deg, rgba(21, 128, 61, 0.36), transparent);
+  }
+
+  .letter-body {
+    max-width: 48rem;
+    padding-left: 1.25rem;
+  }
+
+  .letter-body p {
+    margin: 0.85rem 0 0;
+    color: rgba(23, 53, 40, 0.84);
+    font-size: 1rem;
+    line-height: 1.95;
+  }
+
+  .salutation {
+    color: #14532d;
+    font-weight: 850;
+  }
+
+  .letter-section {
+    margin-top: 2.1rem;
+  }
+
+  .letter-section h2 {
+    margin: 0 0 0.8rem;
+    color: #123024;
+    font-size: 1.6rem;
+    font-weight: 950;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  .letter-notes {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .letter-notes section {
+    border-left: 3px solid rgba(21, 128, 61, 0.28);
+    padding-left: 1rem;
+  }
+
+  .letter-notes h3 {
+    margin: 0;
+    color: #14532d;
+    font-size: 1.08rem;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  .letter-postscript {
+    border: 1px solid rgba(21, 128, 61, 0.16);
+    border-radius: 10px;
+    background: rgba(240, 253, 244, 0.56);
+    padding: 1.15rem;
+  }
+
+  .contact-list {
+    display: grid;
+    gap: 0.7rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact-list li {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: baseline;
+    color: rgba(23, 53, 40, 0.84);
+  }
+
+  .contact-list span {
+    color: #166534;
+    font-weight: 850;
+  }
+
+  .contact-list a {
+    color: #285d40;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-decoration-color: rgba(21, 128, 61, 0.28);
+    text-underline-offset: 0.28em;
+  }
+
+  .contact-list a:hover {
+    color: #047857;
+    text-decoration-color: rgba(4, 120, 87, 0.55);
+  }
+
+  .letter-signature {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: end;
+    margin-top: 2.6rem;
+    color: #5f7a69;
+    font-size: 0.94rem;
+  }
+
+  .letter-signature span {
+    color: #14532d;
+    font-size: 1.4rem;
+    font-weight: 950;
+  }
+
+  @media (max-width: 760px) {
+    .letter-page {
+      padding: 1.1rem 0.85rem 3rem;
+    }
+
+    .about-letter {
+      padding: 1.35rem;
+    }
+
+    .about-letter::before {
+      left: 1rem;
+      opacity: 0.55;
+    }
+
+    .about-letter::after {
+      border-width: 0 3.2rem 3.2rem 0;
+    }
+
+    .letter-stamp {
+      position: relative;
+      right: auto;
+      top: auto;
+      justify-items: start;
+      width: 100%;
+      margin-bottom: 1rem;
+      rotate: 0deg;
+    }
+
+    .letter-stamp img {
+      width: 5.4rem;
+    }
+
+    .letter-head {
+      padding-right: 0;
+    }
+
+    .letter-head h1 {
+      font-size: 2.2rem;
+    }
+
+    .letter-line {
+      margin-block: 1.45rem 1.6rem;
+    }
+
+    .letter-body {
+      padding-left: 0;
+    }
+
+    .contact-list li {
+      grid-template-columns: 1fr;
+      gap: 0.18rem;
+    }
+  }
+</style>

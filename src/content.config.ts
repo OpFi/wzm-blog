@@ -2,6 +2,8 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
+const internalPath = z.string().regex(/^\/(?!\/)/);
+
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
   schema: z.object({
@@ -14,7 +16,7 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     cover: z.string().optional(),
     repoUrl: z.url().optional(),
-    demoUrl: z.url().optional(),
+    demoUrl: z.union([z.url(), internalPath]).optional(),
   }),
 });
 

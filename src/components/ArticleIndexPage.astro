@@ -71,7 +71,6 @@ const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": 
               const primaryTag = item.tags[0] ?? item.type;
               const views = 21 + index * 17 + item.title.length;
               const likes = (index * 3 + 2) % 8 + 1;
-              const comments = (index + 2) % 5;
 
               return (
                 <article
@@ -110,7 +109,6 @@ const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": 
                   </a>
                   <div class="article-actions" aria-hidden="true">
                     <span>喜欢 {likes}</span>
-                    <span>回应 {comments}</span>
                   </div>
                 </article>
               );

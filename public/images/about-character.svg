@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 420" role="img" aria-labelledby="title desc">
+  <title id="title">Creator illustration</title>
+  <desc id="desc">A green-toned illustration of a person writing beside an open notebook.</desc>
+  <defs>
+    <linearGradient id="leaf" x1="116" y1="68" x2="340" y2="338" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#86efac" />
+      <stop offset="0.58" stop-color="#16a34a" />
+      <stop offset="1" stop-color="#047857" />
+    </linearGradient>
+    <linearGradient id="paper" x1="92" y1="126" x2="354" y2="322" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" />
+      <stop offset="1" stop-color="#f0fdf4" />
+    </linearGradient>
+    <filter id="shadow" x="40" y="48" width="360" height="332" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" flood-color="#14532d" flood-opacity="0.14" stdDeviation="16" />
+    </filter>
+  </defs>
+  <rect width="440" height="420" fill="none" />
+  <g filter="url(#shadow)">
+    <path d="M93 156c39-24 80-28 123-13 42-17 86-12 132 15v178c-42-23-85-27-130-12-42-16-84-13-125 9V156Z" fill="url(#paper)" stroke="#15803d" stroke-width="8" stroke-linejoin="round" />
+    <path d="M218 143v181" fill="none" stroke="#15803d" stroke-width="7" stroke-linecap="round" />
+    <path d="M119 304c34-13 68-15 102-4M239 300c31-10 62-9 94 2" fill="none" stroke="#bbf7d0" stroke-width="8" stroke-linecap="round" />
+    <path d="M132 238c16-26 33-39 51-39 24 0 31 37 57 37 15 0 20-14 34-14 10 0 20 10 31 30" fill="none" stroke="#16a34a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M278 269c29-90 72-151 129-184-10 61-39 116-86 166l39-6c-26 33-58 55-96 65l26-42-12 1Z" fill="url(#leaf)" />
+    <path d="M294 290c37-81 75-135 114-162" fill="none" stroke="#f0fdf4" stroke-width="7" stroke-linecap="round" />
+    <path d="M293 289l-21 39 27-15 13-32-19 8Z" fill="#14532d" />
+    <circle cx="158" cy="112" r="38" fill="#dcfce7" stroke="#15803d" stroke-width="7" />
+    <path d="M103 178c20-42 49-62 87-62 33 0 59 19 78 57-26 16-55 24-86 24-30 0-57-7-79-19Z" fill="#bbf7d0" stroke="#15803d" stroke-width="7" stroke-linejoin="round" />
+    <path d="M144 111c-24 4-44 25-52 58 42 19 88 21 137 5-10-42-34-65-73-69 12 13 16 27 12 42-18-12-36-11-53 3 2-20 12-36 29-49Z" fill="#16a34a" opacity="0.9" />
+    <path d="M143 118c-7 11-10 22-8 34M165 118c8 13 11 27 8 42" fill="none" stroke="#f0fdf4" stroke-width="5" stroke-linecap="round" opacity="0.72" />
+  </g>
+  <circle cx="88" cy="92" r="7" fill="#86efac" opacity="0.8" />
+  <circle cx="355" cy="68" r="5" fill="#15803d" opacity="0.55" />
+  <circle cx="385" cy="324" r="6" fill="#bbf7d0" opacity="0.95" />
+</svg>

@@ -16,7 +16,6 @@
 }
 
 html {
-  min-width: 320px;
   scrollbar-gutter: stable;
   background: var(--paper);
   color: var(--ink);
