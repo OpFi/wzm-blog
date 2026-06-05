@@ -66,12 +66,18 @@ const hiddenWritingSlugs = [
 ];
 
 const expectedNotes = [
-  ["first-note", "第一条公开随记"],
-  ["morning-build-log", "上午的构建记录"],
-  ["interface-copy-note", "界面文案要像路标"],
-  ["deployment-checklist-note", "上线前检查清单"],
-  ["reading-capture-note", "读书摘录的入口要短"],
-  ["product-scope-note", "先砍掉范围，再开始实现"],
+  ["first-note", "把日子过成可回头看的样子"],
+  ["morning-build-log", "早起不是为了战胜谁"],
+  ["interface-copy-note", "一句话先问它有没有用"],
+  ["fix-one-small-thing", "低落的时候先把房间变亮"],
+  ["deployment-checklist-note", "凡事提前十分钟"],
+  ["reading-capture-note", "读书不是为了记住所有句子"],
+  ["product-scope-note", "别把计划写得像惩罚"],
+  ["small-kindness-note", "温柔不是没有原则"],
+  ["water-and-sleep-note", "最便宜的保养是喝水和睡觉"],
+  ["ordinary-day-note", "普通日子也有自己的重量"],
+  ["good-question-note", "好问题会让人变安静"],
+  ["quote-about-time-note", "时间会偏爱长期主义者"],
 ];
 
 assert(exists(`projects/${visibleProject[0]}/index.html`), `Expected project page for ${visibleProject[0]} to exist`);
@@ -121,7 +127,7 @@ assert(home.includes('aria-label="微信"'), "Homepage should include WeChat ico
 assert(home.includes('aria-label="邮箱"'), "Homepage should include email icon link");
 assert(home.includes('aria-label="GitHub"'), "Homepage should include GitHub icon link");
 assert(home.includes("AOP案例实践-记录操作日志"), "Homepage should include imported writing content");
-assert(home.includes("第一条公开随记"), "Homepage should include note content");
+assert(home.includes("把日子过成可回头看的样子"), "Homepage should include note content");
 assert(!home.includes("回应"), "Homepage article cards should not show response counts");
 assert(!home.includes("绿色丝带从右向左飘动的动画"), "Homepage should not include the ribbon animation");
 assert(!home.includes("循环生长的绿色叶片动画"), "Homepage should not include the previous leaf animation");
@@ -280,11 +286,11 @@ assert(writingDetail.includes("AOP案例实践-记录操作日志"), "Writing de
 const noteDetail = await read("notes/first-note/index.html");
 assert(noteDetail.includes('<meta property="og:type" content="article">'), "Note detail should use article Open Graph type");
 assert(noteDetail.includes("随笔") || noteDetail.includes("日常"), "Note detail should include localized entry type metadata");
-assert(noteDetail.includes("先把公开工作台搭起来"), "Note detail should include realistic Chinese note copy");
+assert(noteDetail.includes("生活不是等到"), "Note detail should include realistic Chinese note copy");
 
 const rss = await read("rss.xml");
 assert(rss.includes("AOP案例实践-记录操作日志"), "RSS should include imported Chinese writing post");
-assert(rss.includes("第一条公开随记"), "RSS should include Chinese public note");
+assert(rss.includes("把日子过成可回头看的样子"), "RSS should include Chinese public note");
 assert(rss.includes("OpenAi embeddings 在前端的应用-推荐系统"), "RSS should include additional imported Chinese writing post");
 assert(!rss.includes("仅自己可见的草稿"), "RSS should not include draft note");
 
