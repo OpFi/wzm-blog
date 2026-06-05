@@ -50,6 +50,8 @@ assert(exists("images/qq-qr.jpg"), "Expected QQ QR image to exist");
 assert(exists("images/wechat-qr.png"), "Expected WeChat QR image to exist");
 assert(exists("images/articles/Snipaste_2024-07-11_11-43-42.png"), "Expected imported article image asset to exist");
 assert(exists("images/articles/img/1.webp"), "Expected imported article relative image asset to exist");
+assert(exists("images/daily/photos/79e33d2dc4f8588c79b4f18caa7ad8df_origin.jpg"), "Expected imported daily photo asset to exist");
+assert(exists("images/daily/photos/645fa8ab4beabe248e1443de3d813693_origin.jpg"), "Expected imported daily city photo asset to exist");
 assert(!exists("notes/private-draft-note/index.html"), "Draft note detail page should not exist");
 assert(exists("about/index.html"), "Expected dist/about/index.html to exist");
 assert(exists("rss.xml"), "Expected RSS feed to exist");
@@ -94,6 +96,10 @@ for (const [slug] of expectedNotes) {
 }
 
 const home = await read("index.html");
+const homeFeaturedList = home.slice(
+  home.indexOf('aria-label="精选文章列表"'),
+  home.indexOf('aria-label="个人信息卡片"'),
+);
 const homeStyles = await readLinkedStyles(home);
 assert(home.includes('<html lang="zh-CN">'), "Homepage should declare Simplified Chinese language");
 assert(!home.includes('aria-label="王子明的数字工作室 home"'), "Homepage should not render the visible header brand link");
@@ -120,6 +126,11 @@ assert(home.includes("这里是我分享技术文章、生活点滴的地方。"
 assert(home.includes("希望你能在这里收获知识或者好心情。"), "Homepage profile card should include custom closing copy");
 assert(home.includes("博客发布"), "Homepage profile stats should include blog publish label");
 assert(home.includes("网站运行"), "Homepage profile stats should include site running label");
+assert(/<strong[^>]*>72<\/strong>\s*<span[^>]*>博客发布<\/span>/.test(home), "Homepage profile stats should include the total published post count");
+assert(/<strong[^>]*>1<\/strong>\s*<span[^>]*>项目<\/span>/.test(home), "Homepage profile stats should include the visible project count");
+assert(/<strong[^>]*>568 天<\/strong>\s*<span[^>]*>网站运行<\/span>/.test(home), "Homepage profile stats should include the configured site running days");
+assert(home.includes("技术写作 60"), "Homepage profile tags should include the full writing count");
+assert(home.includes("随笔记录 12"), "Homepage profile tags should include the full note count");
 assert(home.includes('href="/images/qq-qr.jpg"'), "Homepage should link QQ icon to the QQ QR image");
 assert(home.includes('href="/images/wechat-qr.png"'), "Homepage should link WeChat icon to the WeChat QR image");
 assert(home.includes('aria-label="QQ"'), "Homepage should include QQ icon link");
@@ -127,7 +138,9 @@ assert(home.includes('aria-label="微信"'), "Homepage should include WeChat ico
 assert(home.includes('aria-label="邮箱"'), "Homepage should include email icon link");
 assert(home.includes('aria-label="GitHub"'), "Homepage should include GitHub icon link");
 assert(home.includes("AOP案例实践-记录操作日志"), "Homepage should include imported writing content");
-assert(home.includes("把日子过成可回头看的样子"), "Homepage should include note content");
+assert(homeFeaturedList.includes('href="/writing/'), "Homepage selected articles should include writing links");
+assert(!homeFeaturedList.includes('href="/notes/'), "Homepage selected articles should not include note links");
+assert(!homeFeaturedList.includes("把日子过成可回头看的样子"), "Homepage selected articles should not include note content");
 assert(!home.includes("回应"), "Homepage article cards should not show response counts");
 assert(!home.includes("绿色丝带从右向左飘动的动画"), "Homepage should not include the ribbon animation");
 assert(!home.includes("循环生长的绿色叶片动画"), "Homepage should not include the previous leaf animation");
@@ -260,8 +273,14 @@ assert(dailyIndex.includes("data-daily-tag"), "Daily page should include tag met
 assert(dailyIndex.includes("updateActiveDailyYear"), "Daily page should update month navigation while scrolling");
 assert(dailyIndex.includes("LIFE'S NOTE"), "Daily page should include the right-side note card");
 assert(dailyIndex.includes("美食"), "Daily page should include the food tag");
-assert(dailyIndex.includes("游戏"), "Daily page should include the game tag");
-assert(dailyIndex.includes("摘抄"), "Daily page should include the excerpt tag");
+assert(dailyIndex.includes("出行"), "Daily page should include the travel tag");
+assert(dailyIndex.includes("运动"), "Daily page should include the exercise tag");
+assert(dailyIndex.includes("记录"), "Daily page should include the record tag");
+assert(dailyIndex.includes("生日蛋糕"), "Daily page should include imported daily photo copy");
+assert(dailyIndex.includes("夜晚的广州塔"), "Daily page should include city night daily copy");
+assert(dailyIndex.includes('src="/images/daily/photos/79e33d2dc4f8588c79b4f18caa7ad8df_origin.jpg"'), "Daily page should render imported cake photo");
+assert(!dailyIndex.includes("很符合我 FF14"), "Daily page should not include the old game diary copy");
+assert(!dailyIndex.includes("碎片摘录：界面要像路标"), "Daily page should not include the old excerpt diary copy");
 assert(dailyIndex.includes("2026年5月"), "Daily page should include month groups");
 assert(
   /\.daily-filter-panel[^{]*\{[^}]*background:/.test(dailyStyles),

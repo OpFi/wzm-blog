@@ -1,15 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { formatDate, getLatestUpdates, getProjects } from "../lib/content";
+import { formatDate, getProjects, getPublishedNotes, getPublishedWriting } from "../lib/content";
 
-const selectedArticles = await getLatestUpdates(14);
-const projects = await getProjects();
-const writingCount = selectedArticles.filter((item) => item.type === "技术").length;
-const noteCount = selectedArticles.length - writingCount;
-const launchDate = Date.UTC(2026, 5, 4);
-const daysOnline = Math.max(1, Math.ceil((Date.now() - launchDate) / 86_400_000));
+const selectedArticles = (await getPublishedWriting()).slice(0, 14).map((entry) => ({
+  entry,
+  type: "技术",
+  href: `/writing/${entry.id}/`,
+}));
+const projects = (await getProjects()).filter((project) => project.id === "personal-blog-system");
+const writingCount = (await getPublishedWriting()).length;
+const noteCount = (await getPublishedNotes()).length;
+const totalPosts = writingCount + noteCount;
+const daysOnline = 568;
 const stats = [
-  { value: selectedArticles.length, label: "博客发布" },
+  { value: totalPosts, label: "博客发布" },
   { value: projects.length, label: "项目" },
   { value: `${daysOnline} 天`, label: "网站运行" },
 ];
