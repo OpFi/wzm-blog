@@ -70,7 +70,6 @@ const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": 
             {items.map((item, index) => {
               const primaryTag = item.tags[0] ?? item.type;
               const views = 21 + index * 17 + item.title.length;
-              const likes = (index * 3 + 2) % 8 + 1;
 
               return (
                 <article
@@ -107,9 +106,6 @@ const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": 
                       <span>{formatDate(item.date)}</span>
                     </div>
                   </a>
-                  <div class="article-actions" aria-hidden="true">
-                    <span>喜欢 {likes}</span>
-                  </div>
                 </article>
               );
             })}
@@ -486,23 +482,6 @@ const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": 
     height: 0.9rem;
   }
 
-  .article-actions {
-    position: absolute;
-    right: 1rem;
-    bottom: 0.9rem;
-    display: flex;
-    gap: 0.4rem;
-    color: #047857;
-    font-size: 0.72rem;
-  }
-
-  .article-actions span {
-    border: 1px solid rgba(5, 150, 105, 0.22);
-    border-radius: 999px;
-    background: rgba(240, 253, 244, 0.82);
-    padding: 0.1rem 0.48rem;
-  }
-
   .index-empty {
     margin: 0;
     border: 1px solid rgba(21, 128, 61, 0.16);
@@ -694,11 +673,6 @@ const namespaceCardAttrs = dataNamespace === "writing" ? { "data-writing-card": 
       order: -1;
     }
 
-    .article-actions {
-      position: static;
-      justify-content: flex-end;
-      padding: 0 1.25rem 1rem;
-    }
   }
 
   @media (max-width: 520px) {

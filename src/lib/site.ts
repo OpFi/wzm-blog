@@ -1,10 +1,10 @@
 export const site = {
-  name: "王子明的数字工作室",
-  title: "王子明的数字工作室 | 项目、文章、随记",
+  name: "小志的博客",
+  title: "小志的博客 | 技术文章、随笔和日常",
   description:
-    "一个记录 Web 产品开发、技术写作、个人知识管理和作品集的中文个人博客。",
+    "小志记录 Web 产品开发、技术写作、生活点滴和作品集的中文个人博客。",
   url: "https://wzm-blog.vercel.app",
-  author: "王子明",
+  author: "小志",
 } as const;
 
 export const navItems = [

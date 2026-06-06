@@ -102,7 +102,9 @@ const homeFeaturedList = home.slice(
 );
 const homeStyles = await readLinkedStyles(home);
 assert(home.includes('<html lang="zh-CN">'), "Homepage should declare Simplified Chinese language");
-assert(!home.includes('aria-label="王子明的数字工作室 home"'), "Homepage should not render the visible header brand link");
+assert(home.includes("<title>小志的博客 | 技术文章、随笔和日常</title>"), "Homepage should use the updated site title");
+assert(home.includes('title="小志的博客 RSS"'), "Homepage RSS alternate link should use the updated site name");
+assert(!home.includes("王子明的数字工作室"), "Homepage should not include the old site name");
 assert(home.includes('src="/images/blog-logo.svg"'), "Homepage should render the blog logo in the header");
 assert(home.includes('alt="绿色书本羽毛 Logo"'), "Homepage logo should have descriptive alt text");
 assert(homeStyles.includes("scrollbar-gutter:stable"), "Site CSS should reserve scrollbar gutter to prevent nav shift");
@@ -142,6 +144,7 @@ assert(homeFeaturedList.includes('href="/writing/'), "Homepage selected articles
 assert(!homeFeaturedList.includes('href="/notes/'), "Homepage selected articles should not include note links");
 assert(!homeFeaturedList.includes("把日子过成可回头看的样子"), "Homepage selected articles should not include note content");
 assert(!home.includes("回应"), "Homepage article cards should not show response counts");
+assert(!homeFeaturedList.includes("article-actions"), "Homepage article cards should not show like badges");
 assert(!home.includes("绿色丝带从右向左飘动的动画"), "Homepage should not include the ribbon animation");
 assert(!home.includes("循环生长的绿色叶片动画"), "Homepage should not include the previous leaf animation");
 const removedHomeSections = ["最新更新", "分类索引", "友情链接", "青木开发日志"];
@@ -169,6 +172,7 @@ assert(about.includes('href="https://github.com/'), "About page should include a
 const projectsIndex = await read("projects/index.html");
 assertNoFooter(projectsIndex, "Projects page");
 assert(projectsIndex.includes("个人博客系统"), "Projects page should include the personal blog project");
+assert(projectsIndex.includes("技术文章、随笔、日常照片"), "Projects page should include the updated personal blog description");
 assert(!projectsIndex.includes("阅读笔记中枢"), "Projects page should not include other project cards");
 assert(!projectsIndex.includes("轻量 CRM 原型"), "Projects page should not include other project cards");
 assert(!projectsIndex.includes("部署观察看板"), "Projects page should not include other project cards");
@@ -182,6 +186,10 @@ assert(projectsIndex.includes('href="/"'), "Project demo link should point to th
 
 const projectDetail = await read("projects/personal-blog-system/index.html");
 assert(projectDetail.includes('src="/images/personal-blog-system-cover.png"'), "Project detail should render project cover image");
+assert(projectDetail.includes("首页精选文章只展示技术文章"), "Project detail should include the updated completed work list");
+assert(projectDetail.includes("技术文章已导入 60 篇"), "Project detail should mention the imported writing collection");
+assert(projectDetail.includes("日常页已换成真实照片时间线"), "Project detail should mention the daily timeline update");
+assert(projectDetail.includes("继续补充真实项目复盘"), "Project detail should include the updated next-step plan");
 assert(
   projectDetail.includes('aria-label="查看个人博客系统演示"'),
   "Project detail demo link should have a project-specific accessible name",
@@ -229,6 +237,7 @@ assert(writingIndex.includes("data-page-input"), "Writing page should include a 
 assert(writingIndex.includes('inputmode="numeric"'), "Writing page pagination input should use numeric input mode");
 assert(writingIndex.includes("paginationJumpToPage"), "Writing page should include page-jump behavior");
 assert(!writingIndex.includes("回应"), "Writing page article cards should not show response counts");
+assert(!writingIndex.includes("article-actions"), "Writing page article cards should not show like badges");
 assert(
   hasLinkWithAttribute(writingIndex, "/writing/", 'aria-current="page"'),
   "Writing index should mark its exact nav link as the current page",
@@ -255,6 +264,7 @@ assert(notesIndex.includes("data-page-next"), "Notes page should include a next-
 assert(notesIndex.includes("data-page-input"), "Notes page should include a jump-to-page input");
 assert(notesIndex.includes('aria-label="输入页码"'), "Notes page should label the page jump input");
 assert(notesIndex.includes("paginationJumpToPage"), "Notes page should include page-jump behavior");
+assert(!notesIndex.includes("article-actions"), "Notes page article cards should not show like badges");
 assert(!notesIndex.includes("回应"), "Notes page article cards should not show response counts");
 assert(!notesIndex.includes("仅自己可见的草稿"), "Notes page should not include draft note");
 
@@ -308,6 +318,8 @@ assert(noteDetail.includes("随笔") || noteDetail.includes("日常"), "Note det
 assert(noteDetail.includes("生活不是等到"), "Note detail should include realistic Chinese note copy");
 
 const rss = await read("rss.xml");
+assert(rss.includes("小志的博客"), "RSS should use the updated site name");
+assert(!rss.includes("王子明的数字工作室"), "RSS should not include the old site name");
 assert(rss.includes("AOP案例实践-记录操作日志"), "RSS should include imported Chinese writing post");
 assert(rss.includes("把日子过成可回头看的样子"), "RSS should include Chinese public note");
 assert(rss.includes("OpenAi embeddings 在前端的应用-推荐系统"), "RSS should include additional imported Chinese writing post");

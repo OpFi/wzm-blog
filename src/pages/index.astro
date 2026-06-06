@@ -30,7 +30,6 @@ const stats = [
         {
           selectedArticles.map((item, index) => {
             const views = 68 + index * 23 + item.entry.data.title.length;
-            const likes = (index * 2 + 3) % 9 + 1;
             const tag = item.entry.data.tags[0] ?? item.type;
 
             return (
@@ -48,9 +47,6 @@ const stats = [
                     <span>{formatDate(item.entry.data.date)}</span>
                   </div>
                 </a>
-                <div class="article-actions" aria-hidden="true">
-                  <span>喜欢 {likes}</span>
-                </div>
               </article>
             );
           })
@@ -237,23 +233,6 @@ const stats = [
     color: rgba(5, 150, 105, 0.36);
   }
 
-  .article-actions {
-    position: absolute;
-    right: 1rem;
-    bottom: 0.9rem;
-    display: flex;
-    gap: 0.4rem;
-    color: #047857;
-    font-size: 0.72rem;
-  }
-
-  .article-actions span {
-    border: 1px solid rgba(5, 150, 105, 0.22);
-    border-radius: 999px;
-    background: rgba(240, 253, 244, 0.82);
-    padding: 0.1rem 0.48rem;
-  }
-
   .profile-card {
     position: sticky;
     top: 1rem;
@@ -409,11 +388,6 @@ const stats = [
       order: -1;
     }
 
-    .article-actions {
-      position: static;
-      justify-content: flex-end;
-      padding: 0 1.25rem 1rem;
-    }
   }
 
   @media (max-width: 520px) {
