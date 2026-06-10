@@ -287,11 +287,17 @@ assert(dailyIndex.includes("出行"), "Daily page should include the travel tag"
 assert(dailyIndex.includes("运动"), "Daily page should include the exercise tag");
 assert(dailyIndex.includes("记录"), "Daily page should include the record tag");
 assert(dailyIndex.includes("生日蛋糕"), "Daily page should include imported daily photo copy");
+assert(
+  (dailyIndex.match(/datetime="2025-01-21"/g) ?? []).length === 2,
+  "Daily page should put both chicken wing entries on the same corrected date",
+);
+assert(!dailyIndex.includes('datetime="2025-01-20"'), "Daily page should not split the chicken wing entries across two dates");
 assert(dailyIndex.includes("夜晚的广州塔"), "Daily page should include city night daily copy");
 assert(dailyIndex.includes('src="/images/daily/photos/79e33d2dc4f8588c79b4f18caa7ad8df_origin.jpg"'), "Daily page should render imported cake photo");
 assert(!dailyIndex.includes("很符合我 FF14"), "Daily page should not include the old game diary copy");
 assert(!dailyIndex.includes("碎片摘录：界面要像路标"), "Daily page should not include the old excerpt diary copy");
 assert(dailyIndex.includes("2026年5月"), "Daily page should include month groups");
+assert(dailyIndex.includes("2025年1月"), "Daily page should include older 2025 month groups");
 assert(
   /\.daily-filter-panel[^{]*\{[^}]*background:/.test(dailyStyles),
   "Daily filter panel should render as a card with a background",
