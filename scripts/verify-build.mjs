@@ -302,6 +302,10 @@ assert(
   /\.daily-filter-panel[^{]*\{[^}]*background:/.test(dailyStyles),
   "Daily filter panel should render as a card with a background",
 );
+assert(
+  dailyStyles.includes("max-height:24rem"),
+  "Daily month navigation should expand enough to show a full year of months",
+);
 assert(!dailyIndex.includes("回应"), "Daily page cards should not show response counts");
 assert(!dailyIndex.includes("仅自己可见的草稿"), "Daily page should not include draft note");
 
