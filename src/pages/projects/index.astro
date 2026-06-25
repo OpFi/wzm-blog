@@ -3,7 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import { getProjects } from "../../lib/content";
 
-const projects = (await getProjects()).filter((project) => project.id === "personal-blog-system");
+const visibleProjectIds = new Set(["ai-passage-creator", "personal-blog-system"]);
+const projects = (await getProjects()).filter((project) => visibleProjectIds.has(project.id));
 ---
 
 <BaseLayout title="项目" description="正在构建、探索和持续打磨的作品集项目。">

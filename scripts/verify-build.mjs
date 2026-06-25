@@ -52,12 +52,16 @@ assert(exists("images/articles/Snipaste_2024-07-11_11-43-42.png"), "Expected imp
 assert(exists("images/articles/img/1.webp"), "Expected imported article relative image asset to exist");
 assert(exists("images/daily/photos/79e33d2dc4f8588c79b4f18caa7ad8df_origin.jpg"), "Expected imported daily photo asset to exist");
 assert(exists("images/daily/photos/645fa8ab4beabe248e1443de3d813693_origin.jpg"), "Expected imported daily city photo asset to exist");
+assert(exists("images/ai-passage-creator-cover.png"), "Expected AI passage creator project cover asset to exist");
 assert(!exists("notes/private-draft-note/index.html"), "Draft note detail page should not exist");
 assert(exists("about/index.html"), "Expected dist/about/index.html to exist");
 assert(exists("rss.xml"), "Expected RSS feed to exist");
 assert(exists("sitemap-index.xml"), "Expected sitemap index to exist");
 
-const visibleProject = ["personal-blog-system", "个人博客系统"];
+const visibleProjects = [
+  ["personal-blog-system", "个人博客系统"],
+  ["ai-passage-creator", "AI 爆款文章创作器"],
+];
 const hiddenProjectSlugs = ["reading-notes-hub", "lightweight-crm-prototype", "deploy-watch-dashboard"];
 
 const hiddenWritingSlugs = [
@@ -82,7 +86,9 @@ const expectedNotes = [
   ["quote-about-time-note", "时间会偏爱长期主义者"],
 ];
 
-assert(exists(`projects/${visibleProject[0]}/index.html`), `Expected project page for ${visibleProject[0]} to exist`);
+for (const [slug] of visibleProjects) {
+  assert(exists(`projects/${slug}/index.html`), `Expected project page for ${slug} to exist`);
+}
 for (const slug of hiddenProjectSlugs) {
   assert(!exists(`projects/${slug}/index.html`), `Hidden project page for ${slug} should not be generated`);
 }
@@ -129,7 +135,7 @@ assert(home.includes("希望你能在这里收获知识或者好心情。"), "Ho
 assert(home.includes("博客发布"), "Homepage profile stats should include blog publish label");
 assert(home.includes("网站运行"), "Homepage profile stats should include site running label");
 assert(/<strong[^>]*>72<\/strong>\s*<span[^>]*>博客发布<\/span>/.test(home), "Homepage profile stats should include the total published post count");
-assert(/<strong[^>]*>1<\/strong>\s*<span[^>]*>项目<\/span>/.test(home), "Homepage profile stats should include the visible project count");
+assert(/<strong[^>]*>2<\/strong>\s*<span[^>]*>项目<\/span>/.test(home), "Homepage profile stats should include the visible project count");
 assert(/<strong[^>]*>568 天<\/strong>\s*<span[^>]*>网站运行<\/span>/.test(home), "Homepage profile stats should include the configured site running days");
 assert(home.includes("技术写作 60"), "Homepage profile tags should include the full writing count");
 assert(home.includes("随笔记录 12"), "Homepage profile tags should include the full note count");
@@ -173,16 +179,28 @@ const projectsIndex = await read("projects/index.html");
 assertNoFooter(projectsIndex, "Projects page");
 assert(projectsIndex.includes("个人博客系统"), "Projects page should include the personal blog project");
 assert(projectsIndex.includes("技术文章、随笔、日常照片"), "Projects page should include the updated personal blog description");
+assert(projectsIndex.includes("AI 爆款文章创作器"), "Projects page should include the AI passage creator project");
+assert(projectsIndex.includes("从选题、标题、大纲、正文到配图"), "Projects page should include the AI passage creator description");
 assert(!projectsIndex.includes("阅读笔记中枢"), "Projects page should not include other project cards");
 assert(!projectsIndex.includes("轻量 CRM 原型"), "Projects page should not include other project cards");
 assert(!projectsIndex.includes("部署观察看板"), "Projects page should not include other project cards");
 assert(projectsIndex.includes('src="/images/personal-blog-system-cover.png"'), "Project card should render project cover image");
+assert(projectsIndex.includes('src="/images/ai-passage-creator-cover.png"'), "AI project card should render project cover image");
 assert(projectsIndex.includes('alt="个人博客系统预览"'), "Project cover should have descriptive Chinese alt text");
+assert(projectsIndex.includes('alt="AI 爆款文章创作器预览"'), "AI project cover should have descriptive Chinese alt text");
 assert(
   projectsIndex.includes('aria-label="查看个人博客系统演示"'),
   "Project demo link should have a project-specific accessible name",
 );
 assert(projectsIndex.includes('href="/"'), "Project demo link should point to the homepage");
+assert(
+  projectsIndex.includes('aria-label="查看AI 爆款文章创作器代码仓库"'),
+  "AI project code link should have a project-specific accessible name",
+);
+assert(
+  projectsIndex.includes('href="https://github.com/OpFi/ai-passage-creator-front"'),
+  "AI project code link should point to the frontend repository",
+);
 
 const projectDetail = await read("projects/personal-blog-system/index.html");
 assert(projectDetail.includes('src="/images/personal-blog-system-cover.png"'), "Project detail should render project cover image");
@@ -195,6 +213,14 @@ assert(
   "Project detail demo link should have a project-specific accessible name",
 );
 assert(projectDetail.includes('href="/"'), "Project detail demo link should point to the homepage");
+
+const aiProjectDetail = await read("projects/ai-passage-creator/index.html");
+assert(aiProjectDetail.includes('src="/images/ai-passage-creator-cover.png"'), "AI project detail should render project cover image");
+assert(aiProjectDetail.includes("多智能体协作"), "AI project detail should describe the agent workflow");
+assert(aiProjectDetail.includes("Spring AI Alibaba"), "AI project detail should mention the backend AI stack");
+assert(aiProjectDetail.includes("SSE"), "AI project detail should mention realtime streaming");
+assert(aiProjectDetail.includes("OpFi/ai-passage-creator-front"), "AI project detail should include the frontend repository");
+assert(aiProjectDetail.includes("OpFi/ai-massage-creator"), "AI project detail should include the backend repository");
 
 const writingIndex = await read("writing/index.html");
 const writingStyles = await readLinkedStyles(writingIndex);

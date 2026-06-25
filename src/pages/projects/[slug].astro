@@ -4,7 +4,8 @@ import ContentLayout from "../../layouts/ContentLayout.astro";
 import TagList from "../../components/TagList.astro";
 
 export async function getStaticPaths() {
-  const projects = (await getCollection("projects")).filter((project) => project.id === "personal-blog-system");
+  const visibleProjectIds = new Set(["ai-passage-creator", "personal-blog-system"]);
+  const projects = (await getCollection("projects")).filter((project) => visibleProjectIds.has(project.id));
   return projects.map((project) => ({
     params: { slug: project.id },
     props: { project },

@@ -7,7 +7,8 @@ const selectedArticles = (await getPublishedWriting()).slice(0, 14).map((entry) 
   type: "技术",
   href: `/writing/${entry.id}/`,
 }));
-const projects = (await getProjects()).filter((project) => project.id === "personal-blog-system");
+const visibleProjectIds = new Set(["ai-passage-creator", "personal-blog-system"]);
+const projects = (await getProjects()).filter((project) => visibleProjectIds.has(project.id));
 const writingCount = (await getPublishedWriting()).length;
 const noteCount = (await getPublishedNotes()).length;
 const totalPosts = writingCount + noteCount;

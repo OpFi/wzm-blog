@@ -1,0 +1,48 @@
+---
+title: "AI 爆款文章创作器"
+description: "一个从选题、标题、大纲、正文到配图都能协同生成的 AI 图文创作平台。"
+date: "2026-06-25"
+status: "正在开发"
+tags: ["AI", "内容创作", "全栈项目"]
+stack: ["Vue 3", "TypeScript", "Ant Design Vue", "Spring Boot", "Spring AI Alibaba", "MySQL", "Redis"]
+featured: false
+cover: "/images/ai-passage-creator-cover.png"
+repoUrl: "https://github.com/OpFi/ai-passage-creator-front"
+---
+
+这是一个围绕 AI 图文创作搭建的全栈项目。它不是单纯调用一次大模型生成文章，而是把内容创作拆成几个可观察、可介入的阶段。
+
+用户先输入选题，系统生成多个标题方案；确认标题后继续生成大纲；大纲可以人工调整，再进入正文生成、配图分析和图文合成。整个过程通过多智能体协作和 SSE 把执行进度推到前端，让创作过程不是黑盒。
+
+## 核心流程
+
+- 根据选题生成 3-5 个标题候选。
+- 选中标题后生成文章大纲，并允许用户编辑或优化。
+- 根据确认后的大纲流式生成 Markdown 正文。
+- 分析正文内容，拆出配图需求。
+- 使用多种图片策略生成或检索配图，再合并成完整图文。
+
+## 技术实现
+
+前端使用 Vue 3、TypeScript、Vite 和 Ant Design Vue，页面包含首页、文章创建、文章列表、文章详情、用户登录注册、VIP 页面和管理统计。
+
+后端使用 Spring Boot 3、Spring AI Alibaba、DashScope、MyBatis-Flex、MySQL、Redis、腾讯云 COS 和 Stripe。智能体部分由 `ArticleAgentService` 编排，按标题、大纲、正文、配图分析和配图生成拆分职责，并通过 AOP 记录执行日志。
+
+## 我比较满意的地方
+
+- 创作流程不是一次性输出，而是分阶段推进，用户能在标题和大纲阶段介入。
+- 前端把智能体流程做成左侧时间线，生成状态、配额、热门选题和正文预览都在同一个工作台里。
+- 配图部分用了策略模式，支持 Pexels、Mermaid、Iconify、表情包、AI 生图和 SVG 图表，也预留了失败降级方案。
+- 会员和配额体系已经接入，后续可以继续打磨成更完整的内容 SaaS。
+
+## 下一步
+
+- 继续稳定文章生成过程中的异常恢复和重试体验。
+- 把前后端部署流程整理成可复用脚本。
+- 优化文章详情页的图文排版和导出体验。
+- 给智能体执行日志做更细的统计分析，方便判断哪一步最耗时、最容易失败。
+
+## 项目仓库
+
+- 前端仓库：[OpFi/ai-passage-creator-front](https://github.com/OpFi/ai-passage-creator-front)
+- 后端仓库：[OpFi/ai-massage-creator](https://github.com/OpFi/ai-massage-creator)
